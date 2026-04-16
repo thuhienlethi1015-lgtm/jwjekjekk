@@ -11,163 +11,224 @@
 body{
  margin:0;
  font-family:'Noto Serif SC', serif;
- background:#f4fff7;
- color:#0f2e1f;
+ background:#f5fff7;
+ color:#1b3a2f;
  overflow-x:hidden;
 }
 
-/* NAV */
+/* ===== TRANSITION ===== */
+.page{
+ display:none;
+ padding:30px;
+ opacity:0;
+ transform:translateY(20px);
+ transition:0.5s;
+}
+.page.active{
+ display:block;
+ opacity:1;
+ transform:translateY(0);
+}
+
+/* ===== BANNER ===== */
+header{
+ height:200px;
+ background:url('images/banner.jpg') center/cover;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:white;
+ font-size:32px;
+ font-family:'Ma Shan Zheng';
+ text-shadow:0 0 10px rgba(0,0,0,0.7);
+}
+
+/* ===== NAV ===== */
 nav{
  display:flex;
  justify-content:center;
- gap:25px;
- background:#d9f5e3;
+ gap:30px;
+ background:#dff7e8;
  padding:12px;
- box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
-nav a{
- cursor:pointer;
- font-family:'Ma Shan Zheng';
- font-size:18px;
 }
 
-/* PAGE */
-.page{display:none;padding:30px}
-.page.active{display:block}
+/* ===== HOME ===== */
+.home-box{
+ max-width:700px;
+ margin:auto;
+ background:white;
+ padding:30px;
+ border-radius:12px;
+ box-shadow:0 10px 30px rgba(0,0,0,0.1);
+ text-align:center;
+}
 
-/* TEXT */
 .line{
  opacity:0;
- transform:translateY(30px);
+ transform:translateY(20px);
  animation:fadeUp 1s forwards;
  font-family:'Ma Shan Zheng';
  font-size:22px;
- text-align:center;
 }
 @keyframes fadeUp{
  to{opacity:1;transform:translateY(0)}
 }
 
-/* MEMBERS */
+/* ===== SƠ NGUYÊN ===== */
+#origin{
+ background:url('images/songuyen.jpg') center/cover;
+ color:white;
+ min-height:80vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+}
+.origin-box{
+ background:rgba(0,0,0,0.5);
+ padding:30px;
+ border-radius:10px;
+ font-family:'Ma Shan Zheng';
+ font-size:22px;
+}
+
+/* ===== MEMBERS ===== */
 .members{
  display:flex;
  justify-content:center;
  gap:30px;
  flex-wrap:wrap;
 }
+
 .card{
- width:200px;
- background:white;
- border-radius:10px;
- padding:10px;
+ width:220px;
+ position:relative;
  cursor:pointer;
- box-shadow:0 4px 15px rgba(0,0,0,0.1);
- text-align:center;
 }
+
 .card img{
  width:100%;
  border-radius:10px;
- animation:float 3s infinite ease-in-out;
-}
-@keyframes float{
- 50%{transform:translateY(-10px)}
 }
 
-/* DETAIL */
+/* HOVER INFO */
+.info{
+ position:absolute;
+ inset:0;
+ background:rgba(0,0,0,0.7);
+ color:white;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ opacity:0;
+ transition:0.3s;
+ padding:10px;
+ border-radius:10px;
+}
+.card:hover .info{
+ opacity:1;
+}
+
+/* ===== DETAIL ===== */
 #detail{
  min-height:100vh;
- background:linear-gradient(#eafff0,#ffffff);
+ background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') center/cover;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+}
+
+.detail-box{
+ background:rgba(255,255,255,0.9);
+ padding:30px;
+ border-radius:12px;
  text-align:center;
- padding-top:50px;
+ max-width:400px;
 }
 
-/* HUD */
-.hud{
- position:fixed;
- top:10px;
- left:10px;
- z-index:999;
- font-size:12px;
-}
-.bar{
- width:200px;
- height:10px;
- background:#ccc;
- margin-bottom:5px;
- border-radius:5px;
- overflow:hidden;
-}
-.hp{background:#4caf50;height:100%}
-.mp{background:#81c784;height:100%}
-
-/* PARTICLE */
-canvas{
+/* ===== FOG CANVAS ===== */
+#fog{
  position:fixed;
  top:0;
  left:0;
  pointer-events:none;
+ z-index:1;
 }
 
-/* BUBBLE */
-.bubble{
+/* ===== LEAF ===== */
+.leaf{
  position:fixed;
- bottom:-50px;
- width:10px;
- height:10px;
- background:rgba(100,255,150,0.3);
- border-radius:50%;
- animation:rise linear infinite;
+ top:-50px;
+ width:20px;
+ height:20px;
+ background:url('https://cdn-icons-png.flaticon.com/512/2909/2909762.png') center/contain no-repeat;
+ animation:fall linear infinite;
+ z-index:2;
 }
-@keyframes rise{
+
+@keyframes fall{
  to{
-  transform:translateY(-110vh) scale(1.5);
-  opacity:0;
+  transform:translateY(110vh) rotate(360deg);
  }
 }
+
 </style>
 </head>
 
 <body>
 
-<audio id="bgm" loop>
- <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">
-</audio>
+<canvas id="fog"></canvas>
 
-<div class="hud">
- HP<div class="bar"><div class="hp" style="width:80%"></div></div>
- Nội lực<div class="bar"><div class="mp" style="width:60%"></div></div>
-</div>
+<header>Hành Trình Xưng Bá Của Ta</header>
 
 <nav>
  <a onclick="goPage('home')">Trang chủ</a>
  <a onclick="goPage('origin')">Sơ nguyên</a>
  <a onclick="goPage('members')">Thành viên</a>
- <a onclick="toggleMusic()">🎵</a>
 </nav>
 
 <!-- HOME -->
 <div id="home" class="page active">
- <div id="homeText"></div>
+ <div class="home-box" id="homeText"></div>
 </div>
 
 <!-- ORIGIN -->
 <div id="origin" class="page">
- <p style="text-align:center;font-family:'Ma Shan Zheng';font-size:22px;">
- "Mười năm trước may mắn đã gặp các vị  
- Mười năm sau may mắn được gặp các vị  
+ <div class="origin-box">
+ "Mười năm trước may mắn đã gặp các vị<br>
+ Mười năm sau may mắn được gặp các vị<br>
  Đều là vinh hạnh của ta!"
- </p>
+ </div>
 </div>
 
 <!-- MEMBERS -->
 <div id="members" class="page">
- <div class="members" id="memberList"></div>
+ <div class="members">
+
+  <div class="card" onclick="openDetail(1)">
+   <img src="images/nv1.jpg">
+   <div class="info">
+    <b>Sở Dĩ</b>
+    <p>Làm giang hồ, xưng bá thiên hạ</p>
+    <i>"Đã đến nhân gian rồi thì cứ sống khoái hoạt một lần đi!"</i>
+   </div>
+  </div>
+
+  <div class="card" onclick="openDetail(2)">
+   <img src="images/nv2.jpg">
+   <div class="info">
+    <b>Tạ Thừa Cảnh</b>
+    <p>Muốn làm một cái cây</p>
+    <i>"Chuyện ngươi muốn làm thì ta đều ủng hộ hết"</i>
+   </div>
+  </div>
+
+ </div>
 </div>
 
 <!-- DETAIL -->
 <div id="detail" class="page"></div>
-
-<canvas id="particle"></canvas>
 
 <script>
 
@@ -189,40 +250,11 @@ text.forEach((t,i)=>{
  box.appendChild(p)
 })
 
-/* DATA */
-const members=[
-{
- id:1,
- name:"Sở Dĩ",
- img:"images/nv1.jpg",
- wish:"Làm giang hồ, xưng bá thiên hạ",
- quote:"Đã đến nhân gian rồi thì cứ sống khoái hoạt một lần đi!"
-},
-{
- id:2,
- name:"Tạ Thừa Cảnh",
- img:"images/nv2.jpg",
- wish:"Ta cũng không rõ nữa, muốn làm cái cây có tính không?",
- quote:"Chuyện ngươi muốn làm thì ta đều ủng hộ hết"
-}
-]
-
-/* RENDER */
-let list=document.getElementById("memberList")
-members.forEach(m=>{
- let d=document.createElement('div')
- d.className='card'
- d.innerHTML=`<img src="${m.img}"><h3>${m.name}</h3>`
- d.onclick=()=>openDetail(m.id)
- list.appendChild(d)
-})
-
 /* NAV */
 function show(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
  document.getElementById(id).classList.add('active')
 }
-
 function goPage(page){
  history.pushState({page:page},"","#"+page)
  show(page)
@@ -230,13 +262,19 @@ function goPage(page){
 
 /* DETAIL */
 function openDetail(id){
- let m=members.find(x=>x.id==id)
+ let data={
+ 1:{name:"Sở Dĩ",wish:"Làm giang hồ",quote:"Sống khoái hoạt!",img:"images/nv1.jpg"},
+ 2:{name:"Tạ Thừa Cảnh",wish:"Làm cái cây",quote:"Ta ủng hộ ngươi",img:"images/nv2.jpg"}
+ }
+ let m=data[id]
 
  document.getElementById("detail").innerHTML=`
- <h1 style="font-family:'Ma Shan Zheng';font-size:40px">${m.name}</h1>
- <img src="${m.img}" width="220">
- <p><b>Ước vọng:</b> ${m.wish}</p>
- <p style="font-style:italic">"${m.quote}"</p>
+ <div class="detail-box">
+  <h2>${m.name}</h2>
+  <img src="${m.img}" width="200">
+  <p>${m.wish}</p>
+  <p>"${m.quote}"</p>
+ </div>
  `
 
  history.pushState({page:"member-"+id},"","#member-"+id)
@@ -247,39 +285,15 @@ function openDetail(id){
 window.onpopstate=function(e){
  if(e.state){
    if(e.state.page.startsWith("member-")){
-     let id=e.state.page.split("-")[1]
-     openDetail(id)
+     openDetail(e.state.page.split("-")[1])
    }else{
      show(e.state.page)
    }
- }else{
-   show("home")
- }
+ }else show("home")
 }
 
-/* LOAD */
-window.onload=function(){
- let hash=location.hash.replace("#","")
-
- if(hash.startsWith("member-")){
-   let id=hash.split("-")[1]
-   openDetail(id)
- }else if(hash){
-   show(hash)
- }else{
-   show("home")
- }
-}
-
-/* MUSIC */
-function toggleMusic(){
- let a=document.getElementById("bgm")
- if(a.paused) a.play()
- else a.pause()
-}
-
-/* PARTICLE */
-let c=document.getElementById("particle")
+/* FOG */
+let c=document.getElementById("fog")
 let ctx=c.getContext("2d")
 
 function resize(){
@@ -288,30 +302,32 @@ function resize(){
 }
 resize()
 
-let p=[]
-for(let i=0;i<40;i++){
- p.push({x:Math.random()*c.width,y:Math.random()*c.height})
+let fog=[]
+for(let i=0;i<30;i++){
+ fog.push({x:Math.random()*c.width,y:Math.random()*c.height,r:50+Math.random()*100})
 }
 
 function draw(){
  ctx.clearRect(0,0,c.width,c.height)
- ctx.fillStyle="rgba(0,150,0,0.5)"
- p.forEach(i=>{
-  ctx.fillRect(i.x,i.y,2,2)
-  i.y+=0.3
-  if(i.y>c.height)i.y=0
+ ctx.fillStyle="rgba(200,255,200,0.05)"
+ fog.forEach(f=>{
+  ctx.beginPath()
+  ctx.arc(f.x,f.y,f.r,0,Math.PI*2)
+  ctx.fill()
+  f.x+=0.1
+  if(f.x>c.width) f.x=0
  })
  requestAnimationFrame(draw)
 }
 draw()
 
-/* BUBBLE */
-for(let i=0;i<20;i++){
- let b=document.createElement("div")
- b.className="bubble"
- b.style.left=Math.random()*100+"vw"
- b.style.animationDuration=(5+Math.random()*10)+"s"
- document.body.appendChild(b)
+/* LEAVES */
+for(let i=0;i<15;i++){
+ let leaf=document.createElement('div')
+ leaf.className='leaf'
+ leaf.style.left=Math.random()*100+'vw'
+ leaf.style.animationDuration=(5+Math.random()*10)+'s'
+ document.body.appendChild(leaf)
 }
 
 </script>
