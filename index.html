@@ -5,18 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hành Trình Xưng Bá Của Ta</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<!-- FONT KHÔNG LỖI TIẾNG VIỆT -->
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 
 <style>
 body{
  margin:0;
- font-family:'Noto Serif SC', serif;
- background:#f5fff7;
+ font-family:'Be Vietnam Pro', sans-serif;
+ background:#f4fff8;
  color:#1b3a2f;
  overflow-x:hidden;
 }
 
-/* ===== TRANSITION ===== */
+/* ===== PAGE ===== */
 .page{
  display:none;
  padding:30px;
@@ -32,15 +33,27 @@ body{
 
 /* ===== BANNER ===== */
 header{
- height:200px;
+ height:180px;
+ position:relative;
  background:url('images/banner.jpg') center/cover;
  display:flex;
  align-items:center;
  justify-content:center;
- color:white;
- font-size:32px;
+}
+
+header::after{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:rgba(0,0,0,0.4); /* lớp tối */
+}
+
+header h1{
+ position:relative;
+ color:#fff;
  font-family:'Ma Shan Zheng';
- text-shadow:0 0 10px rgba(0,0,0,0.7);
+ font-size:34px;
+ z-index:1;
 }
 
 /* ===== NAV ===== */
@@ -48,8 +61,12 @@ nav{
  display:flex;
  justify-content:center;
  gap:30px;
- background:#dff7e8;
+ background:#e6fff2;
  padding:12px;
+}
+nav a{
+ cursor:pointer;
+ font-weight:500;
 }
 
 /* ===== HOME ===== */
@@ -76,21 +93,30 @@ nav{
 
 /* ===== SƠ NGUYÊN ===== */
 #origin{
- background:url('images/songuyen.jpg') center/cover;
- background-attachment:fixed;
- color:white;
+ position:relative;
  min-height:80vh;
  display:flex;
  align-items:center;
  justify-content:center;
- text-align:center;
 }
+
+#origin::before{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:url('images/songuyen.jpg') center/cover;
+ filter:blur(6px) brightness(0.6); /* mờ + tối */
+}
+
 .origin-box{
- background:rgba(0,0,0,0.5);
+ position:relative;
+ color:white;
+ background:rgba(0,0,0,0.4);
  padding:30px;
  border-radius:10px;
  font-family:'Ma Shan Zheng';
  font-size:22px;
+ text-align:center;
 }
 
 /* ===== MEMBERS ===== */
@@ -99,6 +125,7 @@ nav{
  justify-content:center;
  gap:30px;
  flex-wrap:wrap;
+ margin-top:40px; /* FIX lỗi trôi */
 }
 
 .card{
@@ -113,17 +140,17 @@ nav{
  border-radius:10px;
 }
 
-/* ✨ GLOW */
+/* glow */
 .card:hover{
  transform:translateY(-10px) scale(1.05);
- box-shadow:0 0 25px rgba(0,255,150,0.7);
+ box-shadow:0 0 25px rgba(0,255,150,0.6);
 }
 
-/* HOVER INFO */
+/* hover info */
 .info{
  position:absolute;
  inset:0;
- background:rgba(0,0,0,0.7);
+ background:rgba(0,0,0,0.65);
  color:white;
  display:flex;
  flex-direction:column;
@@ -133,6 +160,7 @@ nav{
  transition:0.3s;
  padding:10px;
  border-radius:10px;
+ text-align:center;
 }
 .card:hover .info{
  opacity:1;
@@ -141,13 +169,22 @@ nav{
 /* ===== DETAIL ===== */
 #detail{
  min-height:100vh;
- background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') center/cover;
+ position:relative;
  display:flex;
  align-items:center;
  justify-content:center;
 }
 
+#detail::before{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') center/cover;
+ filter:blur(4px) brightness(0.7);
+}
+
 .detail-box{
+ position:relative;
  background:rgba(255,255,255,0.9);
  padding:30px;
  border-radius:12px;
@@ -155,38 +192,12 @@ nav{
  max-width:400px;
 }
 
-/* ===== FOG ===== */
-#fog{
- position:fixed;
- top:0;
- left:0;
- pointer-events:none;
- z-index:1;
-}
-
 /* ===== PARTICLE ===== */
-#particle{
+canvas{
  position:fixed;
  top:0;
  left:0;
  pointer-events:none;
- z-index:0;
-}
-
-/* ===== LEAF ===== */
-.leaf{
- position:fixed;
- top:-50px;
- width:20px;
- height:20px;
- background:url('https://cdn-icons-png.flaticon.com/512/2909/2909762.png') center/contain no-repeat;
- animation:fall linear infinite;
- z-index:2;
-}
-@keyframes fall{
- to{
-  transform:translateY(110vh) rotate(360deg);
- }
 }
 </style>
 </head>
@@ -194,9 +205,10 @@ nav{
 <body>
 
 <canvas id="particle"></canvas>
-<canvas id="fog"></canvas>
 
-<header>Hành Trình Xưng Bá Của Ta</header>
+<header>
+ <h1>Hành Trình Xưng Bá Của Ta</h1>
+</header>
 
 <nav>
  <a onclick="goPage('home')">Trang chủ</a>
@@ -204,18 +216,21 @@ nav{
  <a onclick="goPage('members')">Thành viên</a>
 </nav>
 
+<!-- HOME -->
 <div id="home" class="page active">
  <div class="home-box" id="homeText"></div>
 </div>
 
+<!-- ORIGIN -->
 <div id="origin" class="page">
  <div class="origin-box">
- "Mười năm trước may mắn đã gặp các vị<br>
+ Mười năm trước may mắn đã gặp các vị<br>
  Mười năm sau may mắn được gặp các vị<br>
- Đều là vinh hạnh của ta!"
+ Đều là vinh hạnh của ta!
  </div>
 </div>
 
+<!-- MEMBERS -->
 <div id="members" class="page">
  <div class="members">
 
@@ -240,11 +255,12 @@ nav{
  </div>
 </div>
 
+<!-- DETAIL -->
 <div id="detail" class="page"></div>
 
 <script>
 
-/* TEXT */
+/* TEXT HOME */
 const text=[
 "Hồng trần muôn sắc",
 "Mây nước đường xa",
@@ -275,89 +291,79 @@ function goPage(page){
 /* DETAIL */
 function openDetail(id){
  let data={
- 1:{name:"Sở Dĩ",wish:"Làm giang hồ",quote:"Sống khoái hoạt!",img:"images/nv1.jpg"},
- 2:{name:"Tạ Thừa Cảnh",wish:"Làm cây",quote:"Ta ủng hộ ngươi",img:"images/nv2.jpg"}
+ 1:{
+  name:"Sở Dĩ",
+  wish:"Làm giang hồ, xưng bá thiên hạ",
+  quote:"Đã đến nhân gian rồi thì cứ sống khoái hoạt một lần đi!",
+  img:"images/nv1.jpg"
+ },
+ 2:{
+  name:"Tạ Thừa Cảnh",
+  wish:"Muốn làm một cái cây",
+  quote:"Chuyện ngươi muốn làm thì ta đều ủng hộ hết",
+  img:"images/nv2.jpg"
  }
+ }
+
  let m=data[id]
 
  document.getElementById("detail").innerHTML=`
  <div class="detail-box">
   <h2>${m.name}</h2>
   <img src="${m.img}" width="200">
-  <p>${m.wish}</p>
-  <p>"${m.quote}"</p>
+  <p><b>Ước vọng:</b> ${m.wish}</p>
+  <p><i>"${m.quote}"</i></p>
  </div>
  `
+
+ history.pushState({page:"member-"+id},"","#member-"+id)
  show("detail")
 }
 
-/* ===== PARTICLE TIÊN KHÍ ===== */
-let pCanvas=document.getElementById("particle")
-let pCtx=pCanvas.getContext("2d")
+/* BACK */
+window.onpopstate=function(e){
+ if(e.state){
+   if(e.state.page.startsWith("member-")){
+     openDetail(e.state.page.split("-")[1])
+   }else{
+     show(e.state.page)
+   }
+ }else show("home")
+}
+
+/* PARTICLE TIÊN KHÍ */
+let c=document.getElementById("particle")
+let ctx=c.getContext("2d")
 
 function resize(){
- pCanvas.width=window.innerWidth
- pCanvas.height=window.innerHeight
+ c.width=window.innerWidth
+ c.height=window.innerHeight
 }
 resize()
 
-let lights=[]
+let p=[]
 for(let i=0;i<60;i++){
- lights.push({
-  x:Math.random()*pCanvas.width,
-  y:Math.random()*pCanvas.height,
-  r:Math.random()*2+1,
+ p.push({
+  x:Math.random()*c.width,
+  y:Math.random()*c.height,
+  r:Math.random()*2,
   v:Math.random()*0.5+0.2
  })
 }
 
-function drawLight(){
- pCtx.clearRect(0,0,pCanvas.width,pCanvas.height)
- pCtx.fillStyle="rgba(100,255,150,0.7)"
- lights.forEach(l=>{
-  pCtx.beginPath()
-  pCtx.arc(l.x,l.y,l.r,0,Math.PI*2)
-  pCtx.fill()
-  l.y-=l.v
-  if(l.y<0) l.y=pCanvas.height
- })
- requestAnimationFrame(drawLight)
-}
-drawLight()
-
-/* ===== FOG ===== */
-let c=document.getElementById("fog")
-let ctx=c.getContext("2d")
-c.width=window.innerWidth
-c.height=window.innerHeight
-
-let fog=[]
-for(let i=0;i<20;i++){
- fog.push({x:Math.random()*c.width,y:Math.random()*c.height,r:80})
-}
-
-function drawFog(){
+function draw(){
  ctx.clearRect(0,0,c.width,c.height)
- ctx.fillStyle="rgba(200,255,200,0.05)"
- fog.forEach(f=>{
+ ctx.fillStyle="rgba(100,255,150,0.6)"
+ p.forEach(i=>{
   ctx.beginPath()
-  ctx.arc(f.x,f.y,f.r,0,Math.PI*2)
+  ctx.arc(i.x,i.y,i.r,0,Math.PI*2)
   ctx.fill()
-  f.x+=0.05
-  if(f.x>c.width)f.x=0
+  i.y-=i.v
+  if(i.y<0)i.y=c.height
  })
- requestAnimationFrame(drawFog)
+ requestAnimationFrame(draw)
 }
-drawFog()
-
-/* ===== LEAVES ===== */
-for(let i=0;i<15;i++){
- let leaf=document.createElement('div')
- leaf.className='leaf'
- leaf.style.left=Math.random()*100+'vw'
- leaf.style.animationDuration=(5+Math.random()*10)+'s'
- document.body.appendChild(leaf)
-}
+draw()
 
 </script>
 
