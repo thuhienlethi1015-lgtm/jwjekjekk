@@ -6,45 +6,126 @@
 <title>Liên Minh Công Lý</title>
 
 <style>
-body{margin:0;font-family:serif;background:#0f1f1a;color:#fff}
+body{
+ margin:0;
+ font-family:serif;
+ background:#0b0f0d;
+ color:#e8f5e9;
+ overflow-x:hidden;
+}
 
 /* NAV */
 nav{
- display:flex;justify-content:center;gap:30px;
- background:#000;padding:15px
+ display:flex;
+ justify-content:center;
+ gap:40px;
+ padding:15px;
+ background:rgba(0,0,0,0.8);
+ position:sticky;
+ top:0;
+ z-index:1000;
 }
-nav a{cursor:pointer}
+nav a{
+ cursor:pointer;
+ transition:0.3s;
+}
+nav a:hover{
+ color:#00ffcc;
+}
 
 /* PAGE */
-.page{display:none;padding:40px}
+.page{
+ display:none;
+ padding:40px;
+ animation:fade 0.5s;
+}
 .page.active{display:block}
+
+@keyframes fade{
+ from{opacity:0;transform:translateY(10px)}
+ to{opacity:1}
+}
 
 /* BOX */
 .box{
- background:#1b3a2f;
+ background:rgba(0,0,0,0.6);
  padding:20px;
  border-radius:10px;
  margin-bottom:20px;
+ box-shadow:0 0 10px #00ffcc33;
 }
 
-/* MEMBERS */
+/* MEMBERS GRID */
 .members{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
  gap:20px;
 }
+
+/* MINI CHARACTER */
 .card{
- background:#1b3a2f;
+ background:#111;
  border-radius:10px;
+ overflow:hidden;
  cursor:pointer;
  text-align:center;
  padding:10px;
+ transition:0.3s;
+ position:relative;
 }
-.card img{width:100%}
+.card:hover{
+ transform:translateY(-10px) scale(1.05);
+ box-shadow:0 0 20px #00ffcc88;
+}
+
+/* FLOAT ANIMATION */
+.card img{
+ width:100%;
+ animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+ 0%,100%{transform:translateY(0)}
+ 50%{transform:translateY(-10px)}
+}
+
+/* GLOW */
+.card::after{
+ content:"";
+ position:absolute;
+ inset:0;
+ box-shadow:0 0 20px #00ffcc55;
+ opacity:0;
+ transition:0.3s;
+}
+.card:hover::after{
+ opacity:1;
+}
+
+/* DETAIL */
+#detail{
+ min-height:100vh;
+ background:radial-gradient(circle,#001a14,#000);
+}
+
+/* TITLE */
+h1,h2{
+ text-shadow:0 0 10px #00ffcc;
+}
+
+/* PARTICLES */
+canvas{
+ position:fixed;
+ top:0;
+ left:0;
+ pointer-events:none;
+}
 </style>
 </head>
 
 <body>
+
+<canvas id="bg"></canvas>
 
 <nav>
  <a onclick="goPage('home')">Trang chủ</a>
@@ -74,11 +155,15 @@ nav a{cursor:pointer}
 
 <!-- ORIGIN -->
 <div id="origin" class="page">
- <h2>Ngày hình thành</h2>
- <p>Tháng 4 năm 2026</p>
+ <div class="box">
+  <h2>Ngày hình thành</h2>
+  <p>Tháng 4 năm 2026</p>
+ </div>
 
- <h2>Lý do hình thành</h2>
- <p>Xưng bá thiên hạ và tìm đàn em.</p>
+ <div class="box">
+  <h2>Lý do hình thành</h2>
+  <p>Xưng bá thiên hạ và tìm đàn em.</p>
+ </div>
 </div>
 
 <!-- MEMBERS -->
@@ -92,20 +177,20 @@ nav a{cursor:pointer}
 
 <script>
 
-/* ===== DATA NHÂN VẬT ===== */
-let membersData = []
+/* ===== DATA ===== */
+let membersData=[]
 for(let i=1;i<=9;i++){
  membersData.push({
   id:i,
   name:"Nhân vật "+i,
   nickname:"Kiếm khách "+i,
-  quote:"Giang hồ hiểm ác, ta vẫn bước.",
-  wish:"Trở thành bá chủ thiên hạ.",
+  skill:"Kiếm pháp + Khinh công",
+  story:"Một cao thủ lang bạt giang hồ, mang trong mình chí lớn.",
   img:`https://i.pravatar.cc/300?img=${i}`
  })
 }
 
-/* ===== RENDER MEMBERS ===== */
+/* ===== RENDER ===== */
 let list=document.getElementById("memberList")
 membersData.forEach(m=>{
  let div=document.createElement('div')
@@ -118,52 +203,92 @@ membersData.forEach(m=>{
  list.appendChild(div)
 })
 
-/* ===== NAVIGATION ===== */
+/* ===== NAV ===== */
 function show(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
  document.getElementById(id).classList.add('active')
 }
 
-/* 👉 QUAN TRỌNG: pushState */
 function goPage(page){
- history.pushState({page:page}, "", "#"+page)
+ history.pushState({page:page},"","#"+page)
  show(page)
 }
 
 /* ===== DETAIL ===== */
 function openDetail(id){
- let m = membersData.find(x=>x.id==id)
+ let m=membersData.find(x=>x.id==id)
 
  document.getElementById("detail").innerHTML=`
-  <h2>${m.name}</h2>
-  <img src="${m.img}" width="200">
+  <h1>${m.name}</h1>
+  <img src="${m.img}" width="220">
+
   <p><b>Biệt danh:</b> ${m.nickname}</p>
-  <p><b>Câu nói:</b> ${m.quote}</p>
-  <p><b>Ước nguyện:</b> ${m.wish}</p>
+  <p><b>Sở trường:</b> ${m.skill}</p>
+  <p><b>Tiểu sử:</b> ${m.story}</p>
  `
 
- history.pushState({page:"detail"}, "", "#detail")
+ history.pushState({page:"member-"+id},"","#member-"+id)
  show("detail")
 }
 
-/* ===== BACK BUTTON (QUAN TRỌNG NHẤT) ===== */
-window.onpopstate = function(event){
- if(event.state && event.state.page){
-   show(event.state.page)
+/* ===== BACK ===== */
+window.onpopstate=function(e){
+ if(e.state){
+   if(e.state.page.startsWith("member-")){
+     let id=e.state.page.split("-")[1]
+     openDetail(id)
+   }else{
+     show(e.state.page)
+   }
  }else{
    show("home")
  }
 }
 
-/* ===== LOAD LẦN ĐẦU ===== */
-window.onload = function(){
- let hash = location.hash.replace("#","")
- if(hash){
+/* ===== LOAD ===== */
+window.onload=function(){
+ let hash=location.hash.replace("#","")
+
+ if(hash.startsWith("member-")){
+   let id=hash.split("-")[1]
+   openDetail(id)
+ }else if(hash){
    show(hash)
  }else{
    show("home")
  }
 }
+
+/* ===== PARTICLES ===== */
+let c=document.getElementById("bg")
+let ctx=c.getContext("2d")
+
+function resize(){
+ c.width=window.innerWidth
+ c.height=window.innerHeight
+}
+resize()
+window.onresize=resize
+
+let p=[]
+for(let i=0;i<40;i++){
+ p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2})
+}
+
+function draw(){
+ ctx.clearRect(0,0,c.width,c.height)
+ ctx.fillStyle="white"
+ p.forEach(i=>{
+  ctx.beginPath()
+  ctx.arc(i.x,i.y,i.r,0,Math.PI*2)
+  ctx.fill()
+  i.y+=0.3
+  if(i.y>c.height) i.y=0
+ })
+ requestAnimationFrame(draw)
+}
+draw()
+
 </script>
 
 </body>
