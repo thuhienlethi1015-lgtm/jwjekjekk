@@ -77,6 +77,7 @@ nav{
 /* ===== SƠ NGUYÊN ===== */
 #origin{
  background:url('images/songuyen.jpg') center/cover;
+ background-attachment:fixed;
  color:white;
  min-height:80vh;
  display:flex;
@@ -104,11 +105,18 @@ nav{
  width:220px;
  position:relative;
  cursor:pointer;
+ transition:0.4s;
 }
 
 .card img{
  width:100%;
  border-radius:10px;
+}
+
+/* ✨ GLOW */
+.card:hover{
+ transform:translateY(-10px) scale(1.05);
+ box-shadow:0 0 25px rgba(0,255,150,0.7);
 }
 
 /* HOVER INFO */
@@ -147,13 +155,22 @@ nav{
  max-width:400px;
 }
 
-/* ===== FOG CANVAS ===== */
+/* ===== FOG ===== */
 #fog{
  position:fixed;
  top:0;
  left:0;
  pointer-events:none;
  z-index:1;
+}
+
+/* ===== PARTICLE ===== */
+#particle{
+ position:fixed;
+ top:0;
+ left:0;
+ pointer-events:none;
+ z-index:0;
 }
 
 /* ===== LEAF ===== */
@@ -166,18 +183,17 @@ nav{
  animation:fall linear infinite;
  z-index:2;
 }
-
 @keyframes fall{
  to{
   transform:translateY(110vh) rotate(360deg);
  }
 }
-
 </style>
 </head>
 
 <body>
 
+<canvas id="particle"></canvas>
 <canvas id="fog"></canvas>
 
 <header>Hành Trình Xưng Bá Của Ta</header>
@@ -188,12 +204,10 @@ nav{
  <a onclick="goPage('members')">Thành viên</a>
 </nav>
 
-<!-- HOME -->
 <div id="home" class="page active">
  <div class="home-box" id="homeText"></div>
 </div>
 
-<!-- ORIGIN -->
 <div id="origin" class="page">
  <div class="origin-box">
  "Mười năm trước may mắn đã gặp các vị<br>
@@ -202,7 +216,6 @@ nav{
  </div>
 </div>
 
-<!-- MEMBERS -->
 <div id="members" class="page">
  <div class="members">
 
@@ -211,7 +224,7 @@ nav{
    <div class="info">
     <b>Sở Dĩ</b>
     <p>Làm giang hồ, xưng bá thiên hạ</p>
-    <i>"Đã đến nhân gian rồi thì cứ sống khoái hoạt một lần đi!"</i>
+    <i>"Sống khoái hoạt!"</i>
    </div>
   </div>
 
@@ -220,14 +233,13 @@ nav{
    <div class="info">
     <b>Tạ Thừa Cảnh</b>
     <p>Muốn làm một cái cây</p>
-    <i>"Chuyện ngươi muốn làm thì ta đều ủng hộ hết"</i>
+    <i>"Ta ủng hộ ngươi"</i>
    </div>
   </div>
 
  </div>
 </div>
 
-<!-- DETAIL -->
 <div id="detail" class="page"></div>
 
 <script>
@@ -264,7 +276,7 @@ function goPage(page){
 function openDetail(id){
  let data={
  1:{name:"Sở Dĩ",wish:"Làm giang hồ",quote:"Sống khoái hoạt!",img:"images/nv1.jpg"},
- 2:{name:"Tạ Thừa Cảnh",wish:"Làm cái cây",quote:"Ta ủng hộ ngươi",img:"images/nv2.jpg"}
+ 2:{name:"Tạ Thừa Cảnh",wish:"Làm cây",quote:"Ta ủng hộ ngươi",img:"images/nv2.jpg"}
  }
  let m=data[id]
 
@@ -276,52 +288,69 @@ function openDetail(id){
   <p>"${m.quote}"</p>
  </div>
  `
-
- history.pushState({page:"member-"+id},"","#member-"+id)
  show("detail")
 }
 
-/* BACK */
-window.onpopstate=function(e){
- if(e.state){
-   if(e.state.page.startsWith("member-")){
-     openDetail(e.state.page.split("-")[1])
-   }else{
-     show(e.state.page)
-   }
- }else show("home")
-}
-
-/* FOG */
-let c=document.getElementById("fog")
-let ctx=c.getContext("2d")
+/* ===== PARTICLE TIÊN KHÍ ===== */
+let pCanvas=document.getElementById("particle")
+let pCtx=pCanvas.getContext("2d")
 
 function resize(){
- c.width=window.innerWidth
- c.height=window.innerHeight
+ pCanvas.width=window.innerWidth
+ pCanvas.height=window.innerHeight
 }
 resize()
 
-let fog=[]
-for(let i=0;i<30;i++){
- fog.push({x:Math.random()*c.width,y:Math.random()*c.height,r:50+Math.random()*100})
+let lights=[]
+for(let i=0;i<60;i++){
+ lights.push({
+  x:Math.random()*pCanvas.width,
+  y:Math.random()*pCanvas.height,
+  r:Math.random()*2+1,
+  v:Math.random()*0.5+0.2
+ })
 }
 
-function draw(){
+function drawLight(){
+ pCtx.clearRect(0,0,pCanvas.width,pCanvas.height)
+ pCtx.fillStyle="rgba(100,255,150,0.7)"
+ lights.forEach(l=>{
+  pCtx.beginPath()
+  pCtx.arc(l.x,l.y,l.r,0,Math.PI*2)
+  pCtx.fill()
+  l.y-=l.v
+  if(l.y<0) l.y=pCanvas.height
+ })
+ requestAnimationFrame(drawLight)
+}
+drawLight()
+
+/* ===== FOG ===== */
+let c=document.getElementById("fog")
+let ctx=c.getContext("2d")
+c.width=window.innerWidth
+c.height=window.innerHeight
+
+let fog=[]
+for(let i=0;i<20;i++){
+ fog.push({x:Math.random()*c.width,y:Math.random()*c.height,r:80})
+}
+
+function drawFog(){
  ctx.clearRect(0,0,c.width,c.height)
  ctx.fillStyle="rgba(200,255,200,0.05)"
  fog.forEach(f=>{
   ctx.beginPath()
   ctx.arc(f.x,f.y,f.r,0,Math.PI*2)
   ctx.fill()
-  f.x+=0.1
-  if(f.x>c.width) f.x=0
+  f.x+=0.05
+  if(f.x>c.width)f.x=0
  })
- requestAnimationFrame(draw)
+ requestAnimationFrame(drawFog)
 }
-draw()
+drawFog()
 
-/* LEAVES */
+/* ===== LEAVES ===== */
 for(let i=0;i<15;i++){
  let leaf=document.createElement('div')
  leaf.className='leaf'
