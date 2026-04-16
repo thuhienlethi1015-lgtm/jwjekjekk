@@ -6,23 +6,14 @@
 <title>Liên Minh Công Lý</title>
 
 <style>
-body{margin:0;font-family:serif;background:#0f1f1a;color:#e8f5e9}
-
-/* HEADER */
-header{height:250px;position:relative;overflow:hidden}
-.banner{
- position:absolute;width:110%;height:110%;
- background:url('https://images.unsplash.com/photo-1549880181-56a44cf4a9a5') center/cover;
- filter:brightness(0.6);
-}
-header h1{position:relative;text-align:center;top:40%}
+body{margin:0;font-family:serif;background:#0f1f1a;color:#fff}
 
 /* NAV */
 nav{
  display:flex;justify-content:center;gap:30px;
  background:#000;padding:15px
 }
-nav a{cursor:pointer;color:white}
+nav a{cursor:pointer}
 
 /* PAGE */
 .page{display:none;padding:40px}
@@ -37,61 +28,32 @@ nav a{cursor:pointer;color:white}
 }
 
 /* MEMBERS */
-.members{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
-.card{background:#1b3a2f;border-radius:10px;cursor:pointer}
+.members{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+ gap:20px;
+}
+.card{
+ background:#1b3a2f;
+ border-radius:10px;
+ cursor:pointer;
+ text-align:center;
+ padding:10px;
+}
 .card img{width:100%}
-
-/* CHAR SCREEN */
-#charScreen{
- position:fixed;top:0;left:0;
- width:100%;height:100%;
- background:#000;
- display:none;
- padding:30px;
- z-index:999;
-}
-
-/* BACK BTN */
-.back{
- position:fixed;
- top:20px;
- left:20px;
- background:#2e7d32;
- padding:10px;
- cursor:pointer;
-}
-
-/* MUSIC */
-.music-btn{
- position:fixed;
- bottom:20px;
- right:20px;
- background:#2e7d32;
- padding:10px;
- cursor:pointer;
-}
 </style>
 </head>
 
 <body>
 
-<header>
- <div class="banner"></div>
- <h1>Liên Minh Công Lý</h1>
-</header>
-
 <nav>
  <a onclick="goPage('home')">Trang chủ</a>
+ <a onclick="goPage('origin')">Sơ nguyên</a>
  <a onclick="goPage('members')">Thành viên</a>
- <a onclick="goPage('login')">Đăng nhập</a>
 </nav>
-
-<!-- BACK BUTTON -->
-<div class="back" onclick="goBack()">← Trở về</div>
 
 <!-- HOME -->
 <div id="home" class="page active">
-
  <div class="box">
   <h2>Lịch sử hình thành</h2>
   <p>
@@ -106,11 +68,17 @@ nav a{cursor:pointer;color:white}
 
  <div class="box">
   <h2>Cột mốc đáng nhớ</h2>
-  <p>
-  Tháng 4 năm 2026, Họ Sở và họ Tạ tạo ra Liên Minh Công Lý.
-  </p>
+  <p>Tháng 4 năm 2026, Họ Sở và họ Tạ tạo ra Liên Minh Công Lý.</p>
  </div>
+</div>
 
+<!-- ORIGIN -->
+<div id="origin" class="page">
+ <h2>Ngày hình thành</h2>
+ <p>Tháng 4 năm 2026</p>
+
+ <h2>Lý do hình thành</h2>
+ <p>Xưng bá thiên hạ và tìm đàn em.</p>
 </div>
 
 <!-- MEMBERS -->
@@ -119,102 +87,83 @@ nav a{cursor:pointer;color:white}
  <div class="members" id="memberList"></div>
 </div>
 
-<!-- LOGIN -->
-<div id="login" class="page">
- <h2>Đăng nhập</h2>
- <input id="user" placeholder="Tài khoản"><br>
- <input id="pass" type="password" placeholder="Mật khẩu"><br>
- <button onclick="login()">Đăng nhập</button>
- <p id="status"></p>
-</div>
-
-<!-- CHARACTER -->
-<div id="charScreen">
- <h1 id="charName"></h1>
- <img id="charImg" width="200">
- <p>HP: <span id="hp"></span></p>
- <p>Nội lực: <span id="mana"></span></p>
- <p>Công: <span id="atk"></span></p>
- <p>Thủ: <span id="def"></span></p>
- <ul id="skills"></ul>
-</div>
-
-<!-- MUSIC -->
-<audio id="music" loop>
- <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">
-</audio>
-<div class="music-btn" onclick="toggleMusic()">🎵</div>
+<!-- DETAIL -->
+<div id="detail" class="page"></div>
 
 <script>
 
-/* ===== HISTORY STACK ===== */
-let historyStack=["home"]
-
-function goPage(id){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
- document.getElementById(id).classList.add('active')
- historyStack.push(id)
-}
-
-function goBack(){
- if(historyStack.length>1){
-   historyStack.pop()
-   let last=historyStack[historyStack.length-1]
-
-   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
-   document.getElementById(last).classList.add('active')
-
-   closeChar()
- }
-}
-
-/* ===== MEMBERS ===== */
-let list=document.getElementById("memberList")
+/* ===== DATA NHÂN VẬT ===== */
+let membersData = []
 for(let i=1;i<=9;i++){
+ membersData.push({
+  id:i,
+  name:"Nhân vật "+i,
+  nickname:"Kiếm khách "+i,
+  quote:"Giang hồ hiểm ác, ta vẫn bước.",
+  wish:"Trở thành bá chủ thiên hạ.",
+  img:`https://i.pravatar.cc/300?img=${i}`
+ })
+}
+
+/* ===== RENDER MEMBERS ===== */
+let list=document.getElementById("memberList")
+membersData.forEach(m=>{
  let div=document.createElement('div')
  div.className='card'
  div.innerHTML=`
-  <img src="https://i.pravatar.cc/300?img=${i}">
-  <h3>Nhân vật ${i}</h3>
+  <img src="${m.img}">
+  <h3>${m.name}</h3>
  `
- div.onclick=()=>showChar(i)
+ div.onclick=()=>openDetail(m.id)
  list.appendChild(div)
+})
+
+/* ===== NAVIGATION ===== */
+function show(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
+ document.getElementById(id).classList.add('active')
 }
 
-/* ===== CHARACTER ===== */
-function showChar(i){
- document.getElementById("charScreen").style.display="block"
-
- document.getElementById("charName").innerText="Nhân vật "+i
- document.getElementById("charImg").src=`https://i.pravatar.cc/300?img=${i}`
-
- document.getElementById("hp").innerText=500+i*10
- document.getElementById("mana").innerText=300+i*5
- document.getElementById("atk").innerText=100+i*2
- document.getElementById("def").innerText=80+i*2
-
- document.getElementById("skills").innerHTML=
- "<li>Kiếm pháp</li><li>Khinh công</li><li>Nội công</li>"
+/* 👉 QUAN TRỌNG: pushState */
+function goPage(page){
+ history.pushState({page:page}, "", "#"+page)
+ show(page)
 }
 
-function closeChar(){
- document.getElementById("charScreen").style.display="none"
+/* ===== DETAIL ===== */
+function openDetail(id){
+ let m = membersData.find(x=>x.id==id)
+
+ document.getElementById("detail").innerHTML=`
+  <h2>${m.name}</h2>
+  <img src="${m.img}" width="200">
+  <p><b>Biệt danh:</b> ${m.nickname}</p>
+  <p><b>Câu nói:</b> ${m.quote}</p>
+  <p><b>Ước nguyện:</b> ${m.wish}</p>
+ `
+
+ history.pushState({page:"detail"}, "", "#detail")
+ show("detail")
 }
 
-/* ===== LOGIN ===== */
-function login(){
- localStorage.setItem("user",user.value)
- localStorage.setItem("pass",pass.value)
- status.innerText="Đã lưu!"
+/* ===== BACK BUTTON (QUAN TRỌNG NHẤT) ===== */
+window.onpopstate = function(event){
+ if(event.state && event.state.page){
+   show(event.state.page)
+ }else{
+   show("home")
+ }
 }
 
-/* ===== MUSIC ===== */
-let music=document.getElementById("music")
-function toggleMusic(){
- if(music.paused) music.play()
- else music.pause()
+/* ===== LOAD LẦN ĐẦU ===== */
+window.onload = function(){
+ let hash = location.hash.replace("#","")
+ if(hash){
+   show(hash)
+ }else{
+   show("home")
+ }
 }
-
 </script>
 
 </body>
