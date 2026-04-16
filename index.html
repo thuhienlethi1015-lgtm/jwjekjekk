@@ -5,13 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Liên Minh Công Lý</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
 body{
  margin:0;
- font-family:serif;
- background:#0b0f0d;
- color:#e8f5e9;
+ font-family:'Noto Serif SC', serif;
+ background:#e8f5e9;
+ color:#1b3a2f;
  overflow-x:hidden;
+}
+
+/* ===== BANNER ===== */
+header{
+ height:40vh;
+ position:relative;
+ overflow:hidden;
+}
+.banner-bg{
+ position:absolute;
+ width:100%;height:100%;
+ background:url('https://images.unsplash.com/photo-1549880338-65ddcdfd017b') center/cover;
+ filter:brightness(0.8);
+}
+.fog{
+ position:absolute;
+ width:200%;
+ height:100%;
+ background:radial-gradient(circle,rgba(255,255,255,0.3),transparent);
+ animation:fogMove 25s linear infinite;
+}
+@keyframes fogMove{
+ 0%{transform:translateX(0)}
+ 100%{transform:translateX(-50%)}
+}
+header h1{
+ position:relative;
+ text-align:center;
+ top:40%;
+ color:white;
+ font-size:40px;
+ text-shadow:0 0 20px rgba(0,0,0,0.7);
 }
 
 /* NAV */
@@ -20,98 +54,106 @@ nav{
  justify-content:center;
  gap:40px;
  padding:15px;
- background:rgba(0,0,0,0.8);
+ background:rgba(255,255,255,0.8);
+ backdrop-filter:blur(10px);
  position:sticky;
  top:0;
  z-index:1000;
 }
-nav a{
- cursor:pointer;
- transition:0.3s;
-}
-nav a:hover{
- color:#00ffcc;
-}
+nav a{cursor:pointer}
 
 /* PAGE */
-.page{
- display:none;
- padding:40px;
- animation:fade 0.5s;
-}
+.page{display:none;padding:40px}
 .page.active{display:block}
-
-@keyframes fade{
- from{opacity:0;transform:translateY(10px)}
- to{opacity:1}
-}
 
 /* BOX */
 .box{
- background:rgba(0,0,0,0.6);
+ background:rgba(255,255,255,0.7);
  padding:20px;
- border-radius:10px;
+ border-radius:15px;
  margin-bottom:20px;
- box-shadow:0 0 10px #00ffcc33;
+ border:1px solid #a5d6a7;
 }
 
-/* MEMBERS GRID */
+/* TEXT EFFECT */
+.story p{
+ opacity:0;
+ transform:translateY(20px);
+ animation:fadeUp 1s forwards;
+}
+@keyframes fadeUp{
+ to{opacity:1;transform:translateY(0)}
+}
+
+/* MEMBERS */
 .members{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
  gap:20px;
 }
 
-/* CARD */
+/* CARD cổ trang */
 .card{
- background:#111;
- border-radius:10px;
+ background:#fff;
+ border-radius:15px;
  overflow:hidden;
- cursor:pointer;
  text-align:center;
- padding:10px;
+ cursor:pointer;
  transition:0.3s;
  position:relative;
+ border:2px solid #a5d6a7;
 }
 .card:hover{
- transform:translateY(-10px) scale(1.05);
- box-shadow:0 0 20px #00ffcc88;
+ transform:scale(1.05);
+ box-shadow:0 0 20px #81c784;
 }
-
-/* FLOAT */
 .card img{
  width:100%;
  animation:float 3s ease-in-out infinite;
 }
 @keyframes float{
- 0%,100%{transform:translateY(0)}
  50%{transform:translateY(-10px)}
 }
 
 /* DETAIL */
 #detail{
+ background:linear-gradient(#e8f5e9,#c8e6c9);
  min-height:100vh;
- background:radial-gradient(circle,#001a14,#000);
 }
 
-/* TITLE */
-h1,h2{
- text-shadow:0 0 10px #00ffcc;
-}
-
-/* PARTICLES */
-canvas{
+/* LEAVES */
+.leaf{
  position:fixed;
- top:0;
- left:0;
- pointer-events:none;
+ top:-50px;
+ width:20px;height:20px;
+ background:url('https://cdn-icons-png.flaticon.com/512/2909/2909762.png') no-repeat center/contain;
+ animation:fall linear infinite;
 }
+@keyframes fall{
+ to{transform:translateY(110vh) rotate(360deg)}
+}
+
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
+<!-- LEAVES -->
+<script>
+for(let i=0;i<20;i++){
+ let l=document.createElement('div')
+ l.className='leaf'
+ l.style.left=Math.random()*100+'vw'
+ l.style.animationDuration=(5+Math.random()*10)+'s'
+ document.body.appendChild(l)
+}
+</script>
+
+<header>
+ <div class="banner-bg"></div>
+ <div class="fog"></div>
+ <h1>Liên Minh Công Lý</h1>
+</header>
 
 <nav>
  <a onclick="goPage('home')">Trang chủ</a>
@@ -121,34 +163,19 @@ canvas{
 
 <!-- HOME -->
 <div id="home" class="page active">
- <div class="box">
-  <h2>Lịch sử hình thành</h2>
-  <p>
-  Ngày xửa ngày xưa, vào một ngày đẹp trời nọ.  
-  Họ Tạ và họ Sở đột nhiên muốn xưng bá thiên hạ.  
-  Nhưng xưng bá thiên hạ thì cần có đàn em.  
-  Thế nên họ Sở nói: Tìm đi?  
-  Họ Tạ trả lời: OK  
-  Vậy là Liên Minh Công Lý ra đời.
-  </p>
- </div>
+ <div class="box story" id="storyBox"></div>
 
  <div class="box">
-  <h2>Cột mốc đáng nhớ</h2>
-  <p>Tháng 4 năm 2026, Họ Sở và họ Tạ tạo ra Liên Minh Công Lý.</p>
+  <h2>Cột mốc</h2>
+  <p>Tháng 4 năm 2026 thành lập Liên Minh.</p>
  </div>
 </div>
 
 <!-- ORIGIN -->
 <div id="origin" class="page">
  <div class="box">
-  <h2>Ngày hình thành</h2>
-  <p>Tháng 4 năm 2026</p>
- </div>
-
- <div class="box">
-  <h2>Lý do hình thành</h2>
-  <p>Xưng bá thiên hạ và tìm đàn em.</p>
+  <h2>Hình thành</h2>
+  <p>Xưng bá thiên hạ.</p>
  </div>
 </div>
 
@@ -163,172 +190,70 @@ canvas{
 
 <script>
 
-/* ===== DATA ===== */
-const membersData = [
-{
- id:1,
- name:"Sở Dĩ",
- nickname:"Kiếm Chủ",
- skill:"Kiếm pháp vô song",
- story:"Một trong hai người sáng lập Liên Minh Công Lý.",
- img:"images/nv1.jpg"
-},
-{
- id:2,
- name:"Tạ Thừa Cảnh",
- nickname:"Quân Sư",
- skill:"Mưu lược",
- story:"Người cùng sáng lập, đầu não chiến lược.",
- img:"images/nv2.jpg"
-},
-{
- id:3,
- name:"Phí Quân An",
- nickname:"Phong Ảnh",
- skill:"Khinh công",
- story:"Thân pháp nhanh như gió.",
- img:"images/nv3.jpg"
-},
-{
- id:4,
- name:"Hoàng Thế Hiển",
- nickname:"Thiết Quyền",
- skill:"Cận chiến",
- story:"Sức mạnh áp đảo.",
- img:"images/nv4.jpg"
-},
-{
- id:5,
- name:"Quý Đề Khôi",
- nickname:"Hộ Vệ",
- skill:"Phòng thủ",
- story:"Tấm khiên vững chắc của Liên Minh.",
- img:"images/nv5.jpg"
-},
-{
- id:6,
- name:"Nhân vật 6",
- nickname:"Ẩn Sĩ",
- skill:"Ẩn thân",
- story:"Hành tung bí ẩn.",
- img:"images/nv6.jpg"
-},
-{
- id:7,
- name:"Nhân vật 7",
- nickname:"Y Tiên",
- skill:"Hồi phục",
- story:"Cứu người hơn giết người.",
- img:"images/nv7.jpg"
-},
-{
- id:8,
- name:"Nhân vật 8",
- nickname:"Kiếm Ma",
- skill:"Độc kiếm",
- story:"Một mình một kiếm.",
- img:"images/nv8.jpg"
-}
+/* STORY */
+const story=[
+"Ngày xưa trời đất hỗn mang...",
+"Sở Dĩ và Tạ Thừa Cảnh lập chí lớn...",
+"Chiêu mộ anh hùng thiên hạ...",
+"Liên Minh Công Lý ra đời..."
 ]
 
-/* ===== RENDER ===== */
-let list=document.getElementById("memberList")
-membersData.forEach(m=>{
- let div=document.createElement('div')
- div.className='card'
- div.innerHTML=`
-  <img src="${m.img}">
-  <h3>${m.name}</h3>
- `
- div.onclick=()=>openDetail(m.id)
- list.appendChild(div)
+let box=document.getElementById("storyBox")
+story.forEach((t,i)=>{
+ let p=document.createElement("p")
+ p.style.animationDelay=i+"s"
+ p.innerText=t
+ box.appendChild(p)
 })
 
-/* ===== NAV ===== */
+/* DATA */
+const membersData=[
+{id:1,name:"Sở Dĩ",img:"images/nv1.jpg"},
+{id:2,name:"Tạ Thừa Cảnh",img:"images/nv2.jpg"},
+{id:3,name:"Phí Quân An",img:"images/nv3.jpg"},
+{id:4,name:"Hoàng Thế Hiển",img:"images/nv4.jpg"},
+{id:5,name:"Quý Đề Khôi",img:"images/nv5.jpg"},
+{id:6,name:"Nhân vật 6",img:"images/nv6.jpg"},
+{id:7,name:"Nhân vật 7",img:"images/nv7.jpg"},
+{id:8,name:"Nhân vật 8",img:"images/nv8.jpg"}
+]
+
+let list=document.getElementById("memberList")
+membersData.forEach(m=>{
+ let d=document.createElement('div')
+ d.className='card'
+ d.innerHTML=`<img src="${m.img}"><h3>${m.name}</h3>`
+ d.onclick=()=>openDetail(m.id)
+ list.appendChild(d)
+})
+
 function show(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
  document.getElementById(id).classList.add('active')
 }
 
-function goPage(page){
- history.pushState({page:page},"","#"+page)
- show(page)
+function goPage(p){
+ history.pushState({page:p},"","#"+p)
+ show(p)
 }
 
-/* ===== DETAIL ===== */
 function openDetail(id){
  let m=membersData.find(x=>x.id==id)
-
  document.getElementById("detail").innerHTML=`
   <h1>${m.name}</h1>
-  <img src="${m.img}" width="220">
-
-  <p><b>Biệt danh:</b> ${m.nickname}</p>
-  <p><b>Sở trường:</b> ${m.skill}</p>
-  <p><b>Tiểu sử:</b> ${m.story}</p>
+  <img src="${m.img}" width="250">
  `
-
  history.pushState({page:"member-"+id},"","#member-"+id)
  show("detail")
 }
 
-/* ===== BACK ===== */
-window.onpopstate=function(e){
+window.onpopstate=e=>{
  if(e.state){
-   if(e.state.page.startsWith("member-")){
-     let id=e.state.page.split("-")[1]
-     openDetail(id)
-   }else{
-     show(e.state.page)
-   }
- }else{
-   show("home")
- }
+  if(e.state.page.startsWith("member-")){
+   openDetail(e.state.page.split("-")[1])
+  }else show(e.state.page)
+ }else show("home")
 }
-
-/* ===== LOAD */
-window.onload=function(){
- let hash=location.hash.replace("#","")
-
- if(hash.startsWith("member-")){
-   let id=hash.split("-")[1]
-   openDetail(id)
- }else if(hash){
-   show(hash)
- }else{
-   show("home")
- }
-}
-
-/* ===== PARTICLES ===== */
-let c=document.getElementById("bg")
-let ctx=c.getContext("2d")
-
-function resize(){
- c.width=window.innerWidth
- c.height=window.innerHeight
-}
-resize()
-window.onresize=resize
-
-let p=[]
-for(let i=0;i<40;i++){
- p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2})
-}
-
-function draw(){
- ctx.clearRect(0,0,c.width,c.height)
- ctx.fillStyle="white"
- p.forEach(i=>{
-  ctx.beginPath()
-  ctx.arc(i.x,i.y,i.r,0,Math.PI*2)
-  ctx.fill()
-  i.y+=0.3
-  if(i.y>c.height) i.y=0
- })
- requestAnimationFrame(draw)
-}
-draw()
 
 </script>
 
