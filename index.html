@@ -2,11 +2,15 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hành Trình Xưng Bá Của Ta</title>
 
-<!-- FONT KHÔNG LỖI TIẾNG VIỆT -->
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<!-- PRELOAD FONT -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;500;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
 
 <style>
 body{
@@ -17,13 +21,13 @@ body{
  overflow-x:hidden;
 }
 
-/* ===== PAGE ===== */
+/* ===== PAGE TRANSITION MƯỢT ===== */
 .page{
  display:none;
  padding:30px;
  opacity:0;
  transform:translateY(20px);
- transition:0.5s;
+ transition:opacity 0.4s ease, transform 0.4s ease;
 }
 .page.active{
  display:block;
@@ -45,15 +49,14 @@ header::after{
  content:"";
  position:absolute;
  inset:0;
- background:rgba(0,0,0,0.4); /* lớp tối */
+ background:rgba(0,0,0,0.5);
 }
 
 header h1{
  position:relative;
  color:#fff;
- font-family:'Ma Shan Zheng';
- font-size:34px;
- z-index:1;
+ font-family:'Playfair Display', serif;
+ font-size:32px;
 }
 
 /* ===== NAV ===== */
@@ -63,10 +66,6 @@ nav{
  gap:30px;
  background:#e6fff2;
  padding:12px;
-}
-nav a{
- cursor:pointer;
- font-weight:500;
 }
 
 /* ===== HOME ===== */
@@ -84,8 +83,7 @@ nav a{
  opacity:0;
  transform:translateY(20px);
  animation:fadeUp 1s forwards;
- font-family:'Ma Shan Zheng';
- font-size:22px;
+ font-size:20px;
 }
 @keyframes fadeUp{
  to{opacity:1;transform:translateY(0)}
@@ -105,7 +103,7 @@ nav a{
  position:absolute;
  inset:0;
  background:url('images/songuyen.jpg') center/cover;
- filter:blur(6px) brightness(0.6); /* mờ + tối */
+ filter:blur(5px) brightness(0.6);
 }
 
 .origin-box{
@@ -114,9 +112,8 @@ nav a{
  background:rgba(0,0,0,0.4);
  padding:30px;
  border-radius:10px;
- font-family:'Ma Shan Zheng';
- font-size:22px;
  text-align:center;
+ font-size:20px;
 }
 
 /* ===== MEMBERS ===== */
@@ -125,32 +122,40 @@ nav a{
  justify-content:center;
  gap:30px;
  flex-wrap:wrap;
- margin-top:40px; /* FIX lỗi trôi */
+ align-items:flex-start;
 }
 
 .card{
  width:220px;
  position:relative;
  cursor:pointer;
+ transform:translateY(10px);
  transition:0.4s;
 }
 
 .card img{
  width:100%;
  border-radius:10px;
+ opacity:0;
+ transition:opacity 0.6s ease;
 }
 
-/* glow */
+/* ảnh load xong */
+.card img.loaded{
+ opacity:1;
+}
+
+/* hover PC */
 .card:hover{
  transform:translateY(-10px) scale(1.05);
  box-shadow:0 0 25px rgba(0,255,150,0.6);
 }
 
-/* hover info */
+/* info */
 .info{
  position:absolute;
  inset:0;
- background:rgba(0,0,0,0.65);
+ background:rgba(0,0,0,0.6);
  color:white;
  display:flex;
  flex-direction:column;
@@ -158,11 +163,16 @@ nav a{
  align-items:center;
  opacity:0;
  transition:0.3s;
- padding:10px;
  border-radius:10px;
  text-align:center;
+ padding:10px;
 }
 .card:hover .info{
+ opacity:1;
+}
+
+/* ===== MOBILE TAP ===== */
+.card.active .info{
  opacity:1;
 }
 
@@ -180,7 +190,7 @@ nav a{
  position:absolute;
  inset:0;
  background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') center/cover;
- filter:blur(4px) brightness(0.7);
+ filter:brightness(0.7);
 }
 
 .detail-box{
@@ -234,33 +244,30 @@ canvas{
 <div id="members" class="page">
  <div class="members">
 
-  <div class="card" onclick="openDetail(1)">
-   <img src="images/nv1.jpg">
+  <div class="card" onclick="handleCard(this,1)">
+   <img src="images/nv1.jpg" loading="lazy">
    <div class="info">
     <b>Sở Dĩ</b>
-    <p>Làm giang hồ, xưng bá thiên hạ</p>
-    <i>"Sống khoái hoạt!"</i>
+    <p>Xưng bá thiên hạ</p>
    </div>
   </div>
 
-  <div class="card" onclick="openDetail(2)">
-   <img src="images/nv2.jpg">
+  <div class="card" onclick="handleCard(this,2)">
+   <img src="images/nv2.jpg" loading="lazy">
    <div class="info">
     <b>Tạ Thừa Cảnh</b>
-    <p>Muốn làm một cái cây</p>
-    <i>"Ta ủng hộ ngươi"</i>
+    <p>Tùy tâm mà sống</p>
    </div>
   </div>
 
  </div>
 </div>
 
-<!-- DETAIL -->
 <div id="detail" class="page"></div>
 
 <script>
 
-/* TEXT HOME */
+/* TEXT */
 const text=[
 "Hồng trần muôn sắc",
 "Mây nước đường xa",
@@ -278,31 +285,41 @@ text.forEach((t,i)=>{
  box.appendChild(p)
 })
 
-/* NAV */
+/* NAV FIX SCROLL */
 function show(id){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
- document.getElementById(id).classList.add('active')
+ document.querySelectorAll('.page').forEach(p=>{
+   p.classList.remove('active')
+   p.style.display='none'
+ })
+
+ let el=document.getElementById(id)
+ el.style.display='block'
+
+ requestAnimationFrame(()=>{
+   el.classList.add('active')
+   window.scrollTo(0,0)
+ })
 }
+
 function goPage(page){
  history.pushState({page:page},"","#"+page)
  show(page)
 }
 
+/* MOBILE + CLICK */
+function handleCard(el,id){
+ if(window.innerWidth<768){
+   el.classList.toggle('active')
+ }else{
+   openDetail(id)
+ }
+}
+
 /* DETAIL */
 function openDetail(id){
  let data={
- 1:{
-  name:"Sở Dĩ",
-  wish:"Làm giang hồ, xưng bá thiên hạ",
-  quote:"Đã đến nhân gian rồi thì cứ sống khoái hoạt một lần đi!",
-  img:"images/nv1.jpg"
- },
- 2:{
-  name:"Tạ Thừa Cảnh",
-  wish:"Muốn làm một cái cây",
-  quote:"Chuyện ngươi muốn làm thì ta đều ủng hộ hết",
-  img:"images/nv2.jpg"
- }
+ 1:{name:"Sở Dĩ",img:"images/nv1.jpg"},
+ 2:{name:"Tạ Thừa Cảnh",img:"images/nv2.jpg"}
  }
 
  let m=data[id]
@@ -311,8 +328,6 @@ function openDetail(id){
  <div class="detail-box">
   <h2>${m.name}</h2>
   <img src="${m.img}" width="200">
-  <p><b>Ước vọng:</b> ${m.wish}</p>
-  <p><i>"${m.quote}"</i></p>
  </div>
  `
 
@@ -331,7 +346,12 @@ window.onpopstate=function(e){
  }else show("home")
 }
 
-/* PARTICLE TIÊN KHÍ */
+/* IMAGE FADE LOAD */
+document.querySelectorAll("img").forEach(img=>{
+ img.onload=()=>img.classList.add("loaded")
+})
+
+/* PARTICLE MƯỢT */
 let c=document.getElementById("particle")
 let ctx=c.getContext("2d")
 
@@ -342,22 +362,19 @@ function resize(){
 resize()
 
 let p=[]
-for(let i=0;i<60;i++){
+for(let i=0;i<50;i++){
  p.push({
   x:Math.random()*c.width,
   y:Math.random()*c.height,
-  r:Math.random()*2,
   v:Math.random()*0.5+0.2
  })
 }
 
 function draw(){
  ctx.clearRect(0,0,c.width,c.height)
- ctx.fillStyle="rgba(100,255,150,0.6)"
+ ctx.fillStyle="rgba(100,255,150,0.5)"
  p.forEach(i=>{
-  ctx.beginPath()
-  ctx.arc(i.x,i.y,i.r,0,Math.PI*2)
-  ctx.fill()
+  ctx.fillRect(i.x,i.y,2,2)
   i.y-=i.v
   if(i.y<0)i.y=c.height
  })
