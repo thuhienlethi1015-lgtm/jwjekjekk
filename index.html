@@ -6,192 +6,166 @@
 <title>Liên Minh Công Lý</title>
 
 <style>
-body{
-  margin:0;
-  font-family:serif;
-  background:#0f1f1a;
-  color:#e8f5e9;
-  overflow-x:hidden;
-}
+body{margin:0;font-family:serif;background:#0f1f1a;color:#e8f5e9}
 
-/* ===== BANNER ===== */
-header{
-  height:280px;
-  position:relative;
-  overflow:hidden;
-}
+/* HEADER */
+header{height:250px;position:relative;overflow:hidden}
 .banner{
-  position:absolute;
-  width:110%;
-  height:110%;
-  background:url('https://images.unsplash.com/photo-1549880181-56a44cf4a9a5') center/cover;
-  filter:brightness(0.6);
+ position:absolute;width:110%;height:110%;
+ background:url('https://images.unsplash.com/photo-1549880181-56a44cf4a9a5') center/cover;
+ filter:brightness(0.6);
 }
-header h1{
-  position:relative;
-  z-index:2;
-  text-align:center;
-  top:40%;
-  font-size:38px;
-}
+header h1{position:relative;text-align:center;top:40%}
 
-/* ===== NAV ===== */
+/* NAV */
 nav{
-  display:flex;
-  justify-content:center;
-  gap:30px;
-  background:rgba(0,0,0,0.7);
-  padding:15px;
-  position:sticky;
-  top:0;
-  z-index:1000;
+ display:flex;justify-content:center;gap:30px;
+ background:#000;padding:15px
 }
-nav a{
-  cursor:pointer;
-  color:white;
-}
+nav a{cursor:pointer;color:white}
 
-/* ===== PAGE ===== */
-.page{
-  display:none;
-  padding:50px;
-  animation:fade 0.5s;
-}
+/* PAGE */
+.page{display:none;padding:40px}
 .page.active{display:block}
 
-@keyframes fade{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1}
+/* BOX */
+.box{
+ background:#1b3a2f;
+ padding:20px;
+ border-radius:10px;
+ margin-bottom:20px;
 }
 
-/* ===== MEMBERS ===== */
-.members{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:20px;
-}
-.card{
-  background:#1b3a2f;
-  border-radius:10px;
-  overflow:hidden;
-  cursor:pointer;
-  transition:0.3s;
-}
-.card:hover{transform:scale(1.05)}
+/* MEMBERS */
+.members{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+.card{background:#1b3a2f;border-radius:10px;cursor:pointer}
 .card img{width:100%}
 
-/* ===== CHARACTER SCREEN ===== */
+/* CHAR SCREEN */
 #charScreen{
-  position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  background:radial-gradient(circle,#0f1f1a,#000);
-  display:none;
-  color:white;
-  z-index:999;
-  padding:30px;
+ position:fixed;top:0;left:0;
+ width:100%;height:100%;
+ background:#000;
+ display:none;
+ padding:30px;
+ z-index:999;
 }
 
-/* ===== LOGIN ===== */
-input{
-  padding:10px;
-  margin:5px;
-}
-button{
-  padding:10px;
-  cursor:pointer;
+/* BACK BTN */
+.back{
+ position:fixed;
+ top:20px;
+ left:20px;
+ background:#2e7d32;
+ padding:10px;
+ cursor:pointer;
 }
 
-/* ===== MUSIC BTN ===== */
+/* MUSIC */
 .music-btn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#2e7d32;
-  padding:10px;
-  cursor:pointer;
-}
-
-/* ===== CANVAS ===== */
-canvas{
-  position:fixed;
-  top:0;
-  left:0;
-  pointer-events:none;
+ position:fixed;
+ bottom:20px;
+ right:20px;
+ background:#2e7d32;
+ padding:10px;
+ cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
-
 <header>
-  <div class="banner" id="banner"></div>
-  <h1>Liên Minh Công Lý</h1>
+ <div class="banner"></div>
+ <h1>Liên Minh Công Lý</h1>
 </header>
 
 <nav>
-  <a onclick="showPage('home')">Trang chủ</a>
-  <a onclick="showPage('origin')">Sơ nguyên</a>
-  <a onclick="showPage('members')">Thành viên</a>
-  <a onclick="showPage('login')">Đăng nhập</a>
+ <a onclick="goPage('home')">Trang chủ</a>
+ <a onclick="goPage('members')">Thành viên</a>
+ <a onclick="goPage('login')">Đăng nhập</a>
 </nav>
+
+<!-- BACK BUTTON -->
+<div class="back" onclick="goBack()">← Trở về</div>
 
 <!-- HOME -->
 <div id="home" class="page active">
-  <h2>Trang chủ</h2>
-</div>
 
-<!-- ORIGIN -->
-<div id="origin" class="page">
-  <h2>Sơ nguyên</h2>
-  <p>Lịch sử hình thành...</p>
+ <div class="box">
+  <h2>Lịch sử hình thành</h2>
+  <p>
+  Ngày xửa ngày xưa, vào một ngày đẹp trời nọ.  
+  Họ Tạ và họ Sở đột nhiên muốn xưng bá thiên hạ.  
+  Nhưng xưng bá thiên hạ thì cần có đàn em.  
+  Thế nên họ Sở nói: Tìm đi?  
+  Họ Tạ trả lời: OK  
+  Vậy là Liên Minh Công Lý ra đời.
+  </p>
+ </div>
+
+ <div class="box">
+  <h2>Cột mốc đáng nhớ</h2>
+  <p>
+  Tháng 4 năm 2026, Họ Sở và họ Tạ tạo ra Liên Minh Công Lý.
+  </p>
+ </div>
+
 </div>
 
 <!-- MEMBERS -->
 <div id="members" class="page">
-  <h2>Thành viên</h2>
-  <div class="members" id="memberList"></div>
+ <h2>Thành viên</h2>
+ <div class="members" id="memberList"></div>
 </div>
 
 <!-- LOGIN -->
 <div id="login" class="page">
-  <h2>Đăng nhập</h2>
-  <input id="user" placeholder="Tài khoản"><br>
-  <input id="pass" type="password" placeholder="Mật khẩu"><br>
-  <button onclick="login()">Đăng nhập</button>
-  <p id="loginStatus"></p>
+ <h2>Đăng nhập</h2>
+ <input id="user" placeholder="Tài khoản"><br>
+ <input id="pass" type="password" placeholder="Mật khẩu"><br>
+ <button onclick="login()">Đăng nhập</button>
+ <p id="status"></p>
 </div>
 
 <!-- CHARACTER -->
 <div id="charScreen">
-<button onclick="closeChar()">X</button>
-
-<h1 id="charName"></h1>
-
-<img id="charImg" style="width:250px">
-
-<p>HP: <span id="hp"></span></p>
-<p>Nội lực: <span id="mana"></span></p>
-<p>Công: <span id="atk"></span></p>
-<p>Thủ: <span id="def"></span></p>
-
-<ul id="skills"></ul>
+ <h1 id="charName"></h1>
+ <img id="charImg" width="200">
+ <p>HP: <span id="hp"></span></p>
+ <p>Nội lực: <span id="mana"></span></p>
+ <p>Công: <span id="atk"></span></p>
+ <p>Thủ: <span id="def"></span></p>
+ <ul id="skills"></ul>
 </div>
 
 <!-- MUSIC -->
 <audio id="music" loop>
-  <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">
+ <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">
 </audio>
 <div class="music-btn" onclick="toggleMusic()">🎵</div>
 
 <script>
 
-/* ===== SPA ===== */
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
-  document.getElementById(id).classList.add('active')
+/* ===== HISTORY STACK ===== */
+let historyStack=["home"]
+
+function goPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
+ document.getElementById(id).classList.add('active')
+ historyStack.push(id)
+}
+
+function goBack(){
+ if(historyStack.length>1){
+   historyStack.pop()
+   let last=historyStack[historyStack.length-1]
+
+   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
+   document.getElementById(last).classList.add('active')
+
+   closeChar()
+ }
 }
 
 /* ===== MEMBERS ===== */
@@ -200,8 +174,8 @@ for(let i=1;i<=9;i++){
  let div=document.createElement('div')
  div.className='card'
  div.innerHTML=`
-   <img src="https://i.pravatar.cc/300?img=${i}">
-   <h3>Nhân vật ${i}</h3>
+  <img src="https://i.pravatar.cc/300?img=${i}">
+  <h3>Nhân vật ${i}</h3>
  `
  div.onclick=()=>showChar(i)
  list.appendChild(div)
@@ -209,68 +183,29 @@ for(let i=1;i<=9;i++){
 
 /* ===== CHARACTER ===== */
 function showChar(i){
- let data={
-  name:"Nhân vật "+i,
-  img:`https://i.pravatar.cc/300?img=${i}`,
-  hp:Math.floor(Math.random()*500+500),
-  mana:Math.floor(Math.random()*300+200),
-  atk:Math.floor(Math.random()*100+50),
-  def:Math.floor(Math.random()*100+50),
-  skills:["Kiếm pháp","Khinh công","Nội công"]
- }
-
  document.getElementById("charScreen").style.display="block"
- document.getElementById("charName").innerText=data.name
- document.getElementById("charImg").src=data.img
- document.getElementById("hp").innerText=data.hp
- document.getElementById("mana").innerText=data.mana
- document.getElementById("atk").innerText=data.atk
- document.getElementById("def").innerText=data.def
 
- let html=""
- data.skills.forEach(s=>html+=`<li>${s}</li>`)
- document.getElementById("skills").innerHTML=html
+ document.getElementById("charName").innerText="Nhân vật "+i
+ document.getElementById("charImg").src=`https://i.pravatar.cc/300?img=${i}`
 
- swordEffect()
+ document.getElementById("hp").innerText=500+i*10
+ document.getElementById("mana").innerText=300+i*5
+ document.getElementById("atk").innerText=100+i*2
+ document.getElementById("def").innerText=80+i*2
+
+ document.getElementById("skills").innerHTML=
+ "<li>Kiếm pháp</li><li>Khinh công</li><li>Nội công</li>"
 }
 
 function closeChar(){
  document.getElementById("charScreen").style.display="none"
 }
 
-/* ===== SWORD EFFECT ===== */
-function swordEffect(){
- let d=document.createElement("div")
- d.style.position="fixed"
- d.style.top="50%"
- d.style.left="50%"
- d.style.width="0px"
- d.style.height="2px"
- d.style.background="linear-gradient(to right, transparent, cyan, white)"
- d.style.transform="translate(-50%,-50%)"
- d.style.zIndex=1000
-
- document.body.appendChild(d)
-
- let w=0
- let grow=setInterval(()=>{
-   w+=40
-   d.style.width=w+"px"
-   if(w>800) clearInterval(grow)
- },10)
-
- setTimeout(()=>d.remove(),500)
-}
-
 /* ===== LOGIN ===== */
 function login(){
- let u=document.getElementById("user").value
- let p=document.getElementById("pass").value
-
- localStorage.setItem("user",u)
- localStorage.setItem("pass",p)
-
- document.getElementById("loginStatus").innerText="Đã lưu!"
+ localStorage.setItem("user",user.value)
+ localStorage.setItem("pass",pass.value)
+ status.innerText="Đã lưu!"
 }
 
 /* ===== MUSIC ===== */
@@ -279,70 +214,6 @@ function toggleMusic(){
  if(music.paused) music.play()
  else music.pause()
 }
-
-/* ===== PARALLAX ===== */
-document.addEventListener('mousemove',e=>{
- document.getElementById('banner').style.transform =
-  `translate(${e.clientX/50}px,${e.clientY/50}px)`
-})
-
-/* ===== PARTICLES ===== */
-let canvas=document.getElementById("bg")
-let ctx=canvas.getContext("2d")
-
-function resize(){
- canvas.width=window.innerWidth
- canvas.height=window.innerHeight
-}
-resize()
-window.onresize=resize
-
-let particles=[]
-for(let i=0;i<50;i++){
- particles.push({
-  x:Math.random()*canvas.width,
-  y:Math.random()*canvas.height,
-  r:Math.random()*2,
-  speed:Math.random()*1
- })
-}
-
-function draw(){
- ctx.clearRect(0,0,canvas.width,canvas.height)
- ctx.fillStyle="white"
-
- particles.forEach(p=>{
-  ctx.beginPath()
-  ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
-  ctx.fill()
-
-  p.y+=p.speed
-  if(p.y>canvas.height) p.y=0
- })
-
- requestAnimationFrame(draw)
-}
-draw()
-
-/* ===== LEAVES ===== */
-for(let i=0;i<20;i++){
- let leaf=document.createElement('div')
- leaf.style.position="fixed"
- leaf.style.top="-50px"
- leaf.style.left=Math.random()*100+"vw"
- leaf.style.width="20px"
- leaf.style.height="20px"
- leaf.style.background="url('https://cdn-icons-png.flaticon.com/512/2909/2909762.png') center/cover"
- leaf.style.animation=`fall ${5+Math.random()*10}s linear infinite`
- document.body.appendChild(leaf)
-}
-
-let style=document.createElement('style')
-style.innerHTML=`
-@keyframes fall{
- to{transform:translateY(110vh) rotate(360deg);}
-}`
-document.head.appendChild(style)
 
 </script>
 
