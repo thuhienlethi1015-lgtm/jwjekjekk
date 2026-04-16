@@ -62,7 +62,7 @@ nav a:hover{
  gap:20px;
 }
 
-/* MINI CHARACTER */
+/* CARD */
 .card{
  background:#111;
  border-radius:10px;
@@ -78,28 +78,14 @@ nav a:hover{
  box-shadow:0 0 20px #00ffcc88;
 }
 
-/* FLOAT ANIMATION */
+/* FLOAT */
 .card img{
  width:100%;
  animation:float 3s ease-in-out infinite;
 }
-
 @keyframes float{
  0%,100%{transform:translateY(0)}
  50%{transform:translateY(-10px)}
-}
-
-/* GLOW */
-.card::after{
- content:"";
- position:absolute;
- inset:0;
- box-shadow:0 0 20px #00ffcc55;
- opacity:0;
- transition:0.3s;
-}
-.card:hover::after{
- opacity:1;
 }
 
 /* DETAIL */
@@ -178,17 +164,72 @@ canvas{
 <script>
 
 /* ===== DATA ===== */
-let membersData=[]
-for(let i=1;i<=9;i++){
- membersData.push({
-  id:i,
-  name:"Nhân vật "+i,
-  nickname:"Kiếm khách "+i,
-  skill:"Kiếm pháp + Khinh công",
-  story:"Một cao thủ lang bạt giang hồ, mang trong mình chí lớn.",
-  img:`https://i.pravatar.cc/300?img=${i}`
- })
+const membersData = [
+{
+ id:1,
+ name:"Sở Dĩ",
+ nickname:"Kiếm Chủ",
+ skill:"Kiếm pháp vô song",
+ story:"Một trong hai người sáng lập Liên Minh Công Lý.",
+ img:"images/nv1.jpg"
+},
+{
+ id:2,
+ name:"Tạ Thừa Cảnh",
+ nickname:"Quân Sư",
+ skill:"Mưu lược",
+ story:"Người cùng sáng lập, đầu não chiến lược.",
+ img:"images/nv2.jpg"
+},
+{
+ id:3,
+ name:"Phí Quân An",
+ nickname:"Phong Ảnh",
+ skill:"Khinh công",
+ story:"Thân pháp nhanh như gió.",
+ img:"images/nv3.jpg"
+},
+{
+ id:4,
+ name:"Hoàng Thế Hiển",
+ nickname:"Thiết Quyền",
+ skill:"Cận chiến",
+ story:"Sức mạnh áp đảo.",
+ img:"images/nv4.jpg"
+},
+{
+ id:5,
+ name:"Quý Đề Khôi",
+ nickname:"Hộ Vệ",
+ skill:"Phòng thủ",
+ story:"Tấm khiên vững chắc của Liên Minh.",
+ img:"images/nv5.jpg"
+},
+{
+ id:6,
+ name:"Nhân vật 6",
+ nickname:"Ẩn Sĩ",
+ skill:"Ẩn thân",
+ story:"Hành tung bí ẩn.",
+ img:"images/nv6.jpg"
+},
+{
+ id:7,
+ name:"Nhân vật 7",
+ nickname:"Y Tiên",
+ skill:"Hồi phục",
+ story:"Cứu người hơn giết người.",
+ img:"images/nv7.jpg"
+},
+{
+ id:8,
+ name:"Nhân vật 8",
+ nickname:"Kiếm Ma",
+ skill:"Độc kiếm",
+ story:"Một mình một kiếm.",
+ img:"images/nv8.jpg"
 }
+]
 
 /* ===== RENDER ===== */
 let list=document.getElementById("memberList")
@@ -245,7 +286,7 @@ window.onpopstate=function(e){
  }
 }
 
-/* ===== LOAD ===== */
+/* ===== LOAD */
 window.onload=function(){
  let hash=location.hash.replace("#","")
 
