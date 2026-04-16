@@ -11,12 +11,39 @@
 body{
  margin:0;
  font-family:'Noto Serif SC', serif;
- background:#e8f5e9;
- color:#1b3a2f;
- overflow-x:hidden;
+ background:#000;
+ color:white;
+ overflow:hidden;
 }
 
-/* ===== BANNER ===== */
+/* ===== INTRO ===== */
+#intro{
+ position:fixed;
+ inset:0;
+ background:black;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ flex-direction:column;
+ z-index:9999;
+ animation:fadeOut 3s 4s forwards;
+}
+#intro h1{
+ font-size:40px;
+ opacity:0;
+ animation:fadeIn 3s forwards;
+}
+@keyframes fadeIn{
+ to{opacity:1}
+}
+@keyframes fadeOut{
+ to{opacity:0;visibility:hidden}
+}
+
+/* ===== MAIN ===== */
+#main{display:none}
+
+/* BANNER */
 header{
  height:40vh;
  position:relative;
@@ -26,74 +53,46 @@ header{
  position:absolute;
  width:100%;height:100%;
  background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') center/cover;
- filter:brightness(0.7);
+ filter:brightness(0.6);
 }
 header h1{
  position:relative;
  text-align:center;
  top:40%;
- color:white;
- font-size:40px;
- text-shadow:0 0 20px rgba(0,0,0,0.7);
 }
 
 /* NAV */
 nav{
  display:flex;
  justify-content:center;
- gap:40px;
- padding:15px;
- background:rgba(255,255,255,0.8);
- backdrop-filter:blur(10px);
- position:sticky;
- top:0;
+ gap:30px;
+ background:#111;
+ padding:10px;
 }
 nav a{cursor:pointer}
 
 /* PAGE */
-.page{display:none;padding:40px}
+.page{display:none;padding:30px}
 .page.active{display:block}
 
-/* TEXT ANIMATION */
+/* HOME TEXT */
 .line{
  opacity:0;
- transform:translateY(20px);
  animation:fadeUp 1s forwards;
 }
 @keyframes fadeUp{
  to{opacity:1;transform:translateY(0)}
 }
 
-/* BOX */
-.box{
- background:rgba(255,255,255,0.8);
- padding:25px;
- border-radius:15px;
- margin-bottom:20px;
- text-align:center;
- line-height:1.8;
-}
-
 /* MEMBERS */
 .members{
  display:flex;
- gap:30px;
  justify-content:center;
- flex-wrap:wrap;
+ gap:20px;
 }
-
 .card{
- width:220px;
- background:white;
- border-radius:15px;
- overflow:hidden;
- text-align:center;
+ width:200px;
  cursor:pointer;
- transition:0.3s;
-}
-.card:hover{
- transform:scale(1.05);
- box-shadow:0 0 20px #81c784;
 }
 .card img{
  width:100%;
@@ -101,37 +100,35 @@ nav a{cursor:pointer}
 
 /* DETAIL */
 #detail{
- min-height:100vh;
  background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') center/cover;
- color:white;
- padding:60px;
- text-shadow:0 0 10px rgba(0,0,0,0.7);
+ min-height:100vh;
 }
 
-.profile{
- background:rgba(0,0,0,0.5);
- padding:30px;
- border-radius:15px;
- max-width:500px;
- margin:auto;
- text-align:center;
-}
-
-.profile img{
- width:200px;
- border-radius:10px;
- margin-bottom:20px;
-}
-
-.quote{
- font-style:italic;
- margin-top:20px;
- color:#c8e6c9;
+/* EFFECT */
+.flash{
+ position:fixed;
+ inset:0;
+ background:white;
+ opacity:0;
+ pointer-events:none;
 }
 </style>
 </head>
 
 <body>
+
+<!-- INTRO -->
+<div id="intro">
+ <h1>Hành Trình Xưng Bá Của Ta</h1>
+</div>
+
+<!-- SOUND -->
+<audio id="bgm" loop>
+ <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">
+</audio>
+
+<!-- MAIN -->
+<div id="main">
 
 <header>
  <div class="banner"></div>
@@ -142,36 +139,39 @@ nav a{cursor:pointer}
  <a onclick="goPage('home')">Trang chủ</a>
  <a onclick="goPage('origin')">Sơ nguyên</a>
  <a onclick="goPage('members')">Thành viên</a>
+ <a onclick="toggleMusic()">🎵</a>
 </nav>
 
-<!-- HOME -->
 <div id="home" class="page active">
- <div class="box" id="homeText"></div>
+ <div id="homeText"></div>
 </div>
 
-<!-- ORIGIN -->
 <div id="origin" class="page">
- <div class="box">
-  <p style="font-size:20px;">
-  "Mười năm trước may mắn đã gặp các vị<br>
-  Mười năm sau may mắn được gặp các vị<br>
-  Đều là vinh hạnh của ta!"
-  </p>
- </div>
+ <p>"Mười năm trước may mắn đã gặp các vị..."</p>
 </div>
 
-<!-- MEMBERS -->
 <div id="members" class="page">
  <div class="members" id="memberList"></div>
 </div>
 
-<!-- DETAIL -->
 <div id="detail" class="page"></div>
+
+</div>
+
+<div class="flash" id="flash"></div>
+
+<canvas id="fog"></canvas>
 
 <script>
 
-/* ===== TEXT HOME ===== */
-const text = [
+/* ===== INTRO LOAD ===== */
+setTimeout(()=>{
+ document.getElementById("main").style.display="block"
+ document.body.style.overflow="auto"
+},4000)
+
+/* ===== TEXT ===== */
+const text=[
 "Hồng trần muôn sắc",
 "Mây nước đường xa",
 "Nay đứng dưới trời cao đất rộng",
@@ -190,23 +190,10 @@ text.forEach((t,i)=>{
 
 /* ===== DATA ===== */
 const members=[
-{
- id:1,
- name:"Sở Dĩ",
- img:"images/nv1.jpg",
- wish:"Làm giang hồ, xưng bá thiên hạ",
- quote:"Đã đến nhân gian rồi thì cứ sống khoái hoạt một lần đi!"
-},
-{
- id:2,
- name:"Tạ Thừa Cảnh",
- img:"images/nv2.jpg",
- wish:"Ta cũng không rõ nữa, muốn làm cái cây có tính không?",
- quote:"Chuyện ngươi muốn làm thì ta đều ủng hộ hết"
-}
+{id:1,name:"Sở Dĩ",img:"images/nv1.jpg"},
+{id:2,name:"Tạ Thừa Cảnh",img:"images/nv2.jpg"}
 ]
 
-/* ===== RENDER ===== */
 let list=document.getElementById("memberList")
 members.forEach(m=>{
  let d=document.createElement('div')
@@ -221,37 +208,62 @@ function show(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
  document.getElementById(id).classList.add('active')
 }
-
 function goPage(p){
  history.pushState({page:p},"","#"+p)
  show(p)
 }
 
+/* EFFECT CLICK */
+function flash(){
+ let f=document.getElementById("flash")
+ f.style.opacity=1
+ setTimeout(()=>f.style.opacity=0,200)
+}
+
 /* DETAIL */
 function openDetail(id){
+ flash()
  let m=members.find(x=>x.id==id)
-
  document.getElementById("detail").innerHTML=`
- <div class="profile">
-  <img src="${m.img}">
-  <h2>${m.name}</h2>
-  <p><b>Ước vọng:</b> ${m.wish}</p>
-  <div class="quote">"${m.quote}"</div>
- </div>
+ <h1>${m.name}</h1>
+ <img src="${m.img}" width="200">
  `
-
- history.pushState({page:"member-"+id},"","#member-"+id)
  show("detail")
 }
 
-/* BACK */
-window.onpopstate=e=>{
- if(e.state){
-  if(e.state.page.startsWith("member-")){
-   openDetail(e.state.page.split("-")[1])
-  }else show(e.state.page)
- }else show("home")
+/* MUSIC */
+function toggleMusic(){
+ let a=document.getElementById("bgm")
+ if(a.paused) a.play()
+ else a.pause()
 }
+
+/* FOG */
+let c=document.getElementById("fog")
+let ctx=c.getContext("2d")
+function resize(){
+ c.width=window.innerWidth
+ c.height=window.innerHeight
+}
+resize()
+
+let fog=[]
+for(let i=0;i<20;i++){
+ fog.push({x:Math.random()*c.width,y:Math.random()*c.height})
+}
+
+function draw(){
+ ctx.clearRect(0,0,c.width,c.height)
+ ctx.fillStyle="rgba(255,255,255,0.05)"
+ fog.forEach(f=>{
+  ctx.beginPath()
+  ctx.arc(f.x,f.y,100,0,Math.PI*2)
+  ctx.fill()
+  f.x+=0.2
+ })
+ requestAnimationFrame(draw)
+}
+draw()
 
 </script>
 
