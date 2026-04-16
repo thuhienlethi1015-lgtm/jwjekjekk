@@ -13,28 +13,8 @@ body{
  font-family:'Noto Serif SC', serif;
  background:#f4fff7;
  color:#0f2e1f;
- overflow:hidden;
+ overflow-x:hidden;
 }
-
-/* INTRO */
-#intro{
- position:fixed;
- inset:0;
- background:#eafff0;
- display:flex;
- justify-content:center;
- align-items:center;
- font-size:40px;
- font-family:'Ma Shan Zheng', cursive;
- z-index:9999;
- animation:fadeOut 3s 3s forwards;
-}
-@keyframes fadeOut{
- to{opacity:0;visibility:hidden}
-}
-
-/* MAIN */
-#main{display:none}
 
 /* NAV */
 nav{
@@ -73,6 +53,7 @@ nav a{
  display:flex;
  justify-content:center;
  gap:30px;
+ flex-wrap:wrap;
 }
 .card{
  width:200px;
@@ -119,22 +100,12 @@ nav a{
 .hp{background:#4caf50;height:100%}
 .mp{background:#81c784;height:100%}
 
-/* KIẾM KHÍ */
-.sword{
- position:fixed;
- width:6px;
- height:40px;
- background:linear-gradient(#ffffff,#4caf50);
- pointer-events:none;
- transform:rotate(45deg);
- opacity:0.7;
-}
-
 /* PARTICLE */
 canvas{
  position:fixed;
  top:0;
  left:0;
+ pointer-events:none;
 }
 
 /* BUBBLE */
@@ -158,8 +129,6 @@ canvas{
 
 <body>
 
-<div id="intro">Hành Trình Xưng Bá Của Ta</div>
-
 <audio id="bgm" loop>
  <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">
 </audio>
@@ -168,8 +137,6 @@ canvas{
  HP<div class="bar"><div class="hp" style="width:80%"></div></div>
  Nội lực<div class="bar"><div class="mp" style="width:60%"></div></div>
 </div>
-
-<div id="main">
 
 <nav>
  <a onclick="goPage('home')">Trang chủ</a>
@@ -200,17 +167,9 @@ canvas{
 <!-- DETAIL -->
 <div id="detail" class="page"></div>
 
-</div>
-
 <canvas id="particle"></canvas>
 
 <script>
-
-/* INTRO */
-setTimeout(()=>{
- document.getElementById("main").style.display="block"
- document.body.style.overflow="auto"
-},3000)
 
 /* TEXT */
 const text=[
@@ -318,16 +277,6 @@ function toggleMusic(){
  if(a.paused) a.play()
  else a.pause()
 }
-
-/* KIẾM KHÍ */
-document.addEventListener("mousemove",e=>{
- let s=document.createElement("div")
- s.className="sword"
- s.style.left=e.clientX+"px"
- s.style.top=e.clientY+"px"
- document.body.appendChild(s)
- setTimeout(()=>s.remove(),300)
-})
 
 /* PARTICLE */
 let c=document.getElementById("particle")
