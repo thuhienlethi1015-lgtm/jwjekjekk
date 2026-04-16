@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liên Minh Công Lý</title>
+<title>Hành Trình Xưng Bá Của Ta</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
 
@@ -22,22 +22,11 @@ header{
  position:relative;
  overflow:hidden;
 }
-.banner-bg{
+.banner{
  position:absolute;
  width:100%;height:100%;
- background:url('https://images.unsplash.com/photo-1549880338-65ddcdfd017b') center/cover;
- filter:brightness(0.8);
-}
-.fog{
- position:absolute;
- width:200%;
- height:100%;
- background:radial-gradient(circle,rgba(255,255,255,0.3),transparent);
- animation:fogMove 25s linear infinite;
-}
-@keyframes fogMove{
- 0%{transform:translateX(0)}
- 100%{transform:translateX(-50%)}
+ background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') center/cover;
+ filter:brightness(0.7);
 }
 header h1{
  position:relative;
@@ -58,7 +47,6 @@ nav{
  backdrop-filter:blur(10px);
  position:sticky;
  top:0;
- z-index:1000;
 }
 nav a{cursor:pointer}
 
@@ -66,17 +54,8 @@ nav a{cursor:pointer}
 .page{display:none;padding:40px}
 .page.active{display:block}
 
-/* BOX */
-.box{
- background:rgba(255,255,255,0.7);
- padding:20px;
- border-radius:15px;
- margin-bottom:20px;
- border:1px solid #a5d6a7;
-}
-
-/* TEXT EFFECT */
-.story p{
+/* TEXT ANIMATION */
+.line{
  opacity:0;
  transform:translateY(20px);
  animation:fadeUp 1s forwards;
@@ -85,23 +64,32 @@ nav a{cursor:pointer}
  to{opacity:1;transform:translateY(0)}
 }
 
-/* MEMBERS */
-.members{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
- gap:20px;
+/* BOX */
+.box{
+ background:rgba(255,255,255,0.8);
+ padding:25px;
+ border-radius:15px;
+ margin-bottom:20px;
+ text-align:center;
+ line-height:1.8;
 }
 
-/* CARD cổ trang */
+/* MEMBERS */
+.members{
+ display:flex;
+ gap:30px;
+ justify-content:center;
+ flex-wrap:wrap;
+}
+
 .card{
- background:#fff;
+ width:220px;
+ background:white;
  border-radius:15px;
  overflow:hidden;
  text-align:center;
  cursor:pointer;
  transition:0.3s;
- position:relative;
- border:2px solid #a5d6a7;
 }
 .card:hover{
  transform:scale(1.05);
@@ -109,50 +97,45 @@ nav a{cursor:pointer}
 }
 .card img{
  width:100%;
- animation:float 3s ease-in-out infinite;
-}
-@keyframes float{
- 50%{transform:translateY(-10px)}
 }
 
 /* DETAIL */
 #detail{
- background:linear-gradient(#e8f5e9,#c8e6c9);
  min-height:100vh;
+ background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') center/cover;
+ color:white;
+ padding:60px;
+ text-shadow:0 0 10px rgba(0,0,0,0.7);
 }
 
-/* LEAVES */
-.leaf{
- position:fixed;
- top:-50px;
- width:20px;height:20px;
- background:url('https://cdn-icons-png.flaticon.com/512/2909/2909762.png') no-repeat center/contain;
- animation:fall linear infinite;
-}
-@keyframes fall{
- to{transform:translateY(110vh) rotate(360deg)}
+.profile{
+ background:rgba(0,0,0,0.5);
+ padding:30px;
+ border-radius:15px;
+ max-width:500px;
+ margin:auto;
+ text-align:center;
 }
 
+.profile img{
+ width:200px;
+ border-radius:10px;
+ margin-bottom:20px;
+}
+
+.quote{
+ font-style:italic;
+ margin-top:20px;
+ color:#c8e6c9;
+}
 </style>
 </head>
 
 <body>
 
-<!-- LEAVES -->
-<script>
-for(let i=0;i<20;i++){
- let l=document.createElement('div')
- l.className='leaf'
- l.style.left=Math.random()*100+'vw'
- l.style.animationDuration=(5+Math.random()*10)+'s'
- document.body.appendChild(l)
-}
-</script>
-
 <header>
- <div class="banner-bg"></div>
- <div class="fog"></div>
- <h1>Liên Minh Công Lý</h1>
+ <div class="banner"></div>
+ <h1>Hành Trình Xưng Bá Của Ta</h1>
 </header>
 
 <nav>
@@ -163,25 +146,22 @@ for(let i=0;i<20;i++){
 
 <!-- HOME -->
 <div id="home" class="page active">
- <div class="box story" id="storyBox"></div>
-
- <div class="box">
-  <h2>Cột mốc</h2>
-  <p>Tháng 4 năm 2026 thành lập Liên Minh.</p>
- </div>
+ <div class="box" id="homeText"></div>
 </div>
 
 <!-- ORIGIN -->
 <div id="origin" class="page">
  <div class="box">
-  <h2>Hình thành</h2>
-  <p>Xưng bá thiên hạ.</p>
+  <p style="font-size:20px;">
+  "Mười năm trước may mắn đã gặp các vị<br>
+  Mười năm sau may mắn được gặp các vị<br>
+  Đều là vinh hạnh của ta!"
+  </p>
  </div>
 </div>
 
 <!-- MEMBERS -->
 <div id="members" class="page">
- <h2>Thành viên</h2>
  <div class="members" id="memberList"></div>
 </div>
 
@@ -190,36 +170,45 @@ for(let i=0;i<20;i++){
 
 <script>
 
-/* STORY */
-const story=[
-"Ngày xưa trời đất hỗn mang...",
-"Sở Dĩ và Tạ Thừa Cảnh lập chí lớn...",
-"Chiêu mộ anh hùng thiên hạ...",
-"Liên Minh Công Lý ra đời..."
+/* ===== TEXT HOME ===== */
+const text = [
+"Hồng trần muôn sắc",
+"Mây nước đường xa",
+"Nay đứng dưới trời cao đất rộng",
+"Chỉ mong không thẹn với minh nguyệt trong lòng",
+"Ta, từng là một thiếu niên"
 ]
 
-let box=document.getElementById("storyBox")
-story.forEach((t,i)=>{
+let box=document.getElementById("homeText")
+text.forEach((t,i)=>{
  let p=document.createElement("p")
+ p.className="line"
  p.style.animationDelay=i+"s"
  p.innerText=t
  box.appendChild(p)
 })
 
-/* DATA */
-const membersData=[
-{id:1,name:"Sở Dĩ",img:"images/nv1.jpg"},
-{id:2,name:"Tạ Thừa Cảnh",img:"images/nv2.jpg"},
-{id:3,name:"Phí Quân An",img:"images/nv3.jpg"},
-{id:4,name:"Hoàng Thế Hiển",img:"images/nv4.jpg"},
-{id:5,name:"Quý Đề Khôi",img:"images/nv5.jpg"},
-{id:6,name:"Nhân vật 6",img:"images/nv6.jpg"},
-{id:7,name:"Nhân vật 7",img:"images/nv7.jpg"},
-{id:8,name:"Nhân vật 8",img:"images/nv8.jpg"}
+/* ===== DATA ===== */
+const members=[
+{
+ id:1,
+ name:"Sở Dĩ",
+ img:"images/nv1.jpg",
+ wish:"Làm giang hồ, xưng bá thiên hạ",
+ quote:"Đã đến nhân gian rồi thì cứ sống khoái hoạt một lần đi!"
+},
+{
+ id:2,
+ name:"Tạ Thừa Cảnh",
+ img:"images/nv2.jpg",
+ wish:"Ta cũng không rõ nữa, muốn làm cái cây có tính không?",
+ quote:"Chuyện ngươi muốn làm thì ta đều ủng hộ hết"
+}
 ]
 
+/* ===== RENDER ===== */
 let list=document.getElementById("memberList")
-membersData.forEach(m=>{
+members.forEach(m=>{
  let d=document.createElement('div')
  d.className='card'
  d.innerHTML=`<img src="${m.img}"><h3>${m.name}</h3>`
@@ -227,6 +216,7 @@ membersData.forEach(m=>{
  list.appendChild(d)
 })
 
+/* NAV */
 function show(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
  document.getElementById(id).classList.add('active')
@@ -237,16 +227,24 @@ function goPage(p){
  show(p)
 }
 
+/* DETAIL */
 function openDetail(id){
- let m=membersData.find(x=>x.id==id)
+ let m=members.find(x=>x.id==id)
+
  document.getElementById("detail").innerHTML=`
-  <h1>${m.name}</h1>
-  <img src="${m.img}" width="250">
+ <div class="profile">
+  <img src="${m.img}">
+  <h2>${m.name}</h2>
+  <p><b>Ước vọng:</b> ${m.wish}</p>
+  <div class="quote">"${m.quote}"</div>
+ </div>
  `
+
  history.pushState({page:"member-"+id},"","#member-"+id)
  show("detail")
 }
 
+/* BACK */
 window.onpopstate=e=>{
  if(e.state){
   if(e.state.page.startsWith("member-")){
