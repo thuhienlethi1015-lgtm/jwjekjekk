@@ -11,68 +11,42 @@
 body{
  margin:0;
  font-family:'Noto Serif SC', serif;
- background:#000;
+ background:black;
  color:white;
  overflow:hidden;
 }
 
-/* ===== INTRO ===== */
+/* INTRO */
 #intro{
  position:fixed;
  inset:0;
  background:black;
  display:flex;
- align-items:center;
  justify-content:center;
- flex-direction:column;
+ align-items:center;
+ font-size:30px;
  z-index:9999;
- animation:fadeOut 3s 4s forwards;
-}
-#intro h1{
- font-size:40px;
- opacity:0;
- animation:fadeIn 3s forwards;
-}
-@keyframes fadeIn{
- to{opacity:1}
+ animation:fadeOut 3s 3s forwards;
 }
 @keyframes fadeOut{
  to{opacity:0;visibility:hidden}
 }
 
-/* ===== MAIN ===== */
+/* MAIN */
 #main{display:none}
-
-/* BANNER */
-header{
- height:40vh;
- position:relative;
- overflow:hidden;
-}
-.banner{
- position:absolute;
- width:100%;height:100%;
- background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') center/cover;
- filter:brightness(0.6);
-}
-header h1{
- position:relative;
- text-align:center;
- top:40%;
-}
 
 /* NAV */
 nav{
  display:flex;
  justify-content:center;
- gap:30px;
+ gap:20px;
  background:#111;
  padding:10px;
 }
 nav a{cursor:pointer}
 
 /* PAGE */
-.page{display:none;padding:30px}
+.page{display:none;padding:20px}
 .page.active{display:block}
 
 /* HOME TEXT */
@@ -88,52 +62,79 @@ nav a{cursor:pointer}
 .members{
  display:flex;
  justify-content:center;
- gap:20px;
+ gap:30px;
 }
 .card{
  width:200px;
  cursor:pointer;
+ text-align:center;
 }
 .card img{
  width:100%;
+ animation:float 3s infinite;
+}
+@keyframes float{
+ 50%{transform:translateY(-10px)}
 }
 
 /* DETAIL */
 #detail{
- background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') center/cover;
  min-height:100vh;
+ background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') center/cover;
+ text-align:center;
+ padding-top:50px;
 }
 
-/* EFFECT */
-.flash{
+/* HUD */
+.hud{
  position:fixed;
- inset:0;
- background:white;
- opacity:0;
+ top:10px;
+ left:10px;
+ z-index:999;
+}
+.bar{
+ width:200px;
+ height:10px;
+ background:#333;
+ margin-bottom:5px;
+}
+.hp{background:red;height:100%}
+.mp{background:cyan;height:100%}
+
+/* KIEM KHI */
+.sword{
+ position:fixed;
+ width:6px;
+ height:40px;
+ background:linear-gradient(white,cyan);
  pointer-events:none;
+ transform:rotate(45deg);
+ opacity:0.7;
+}
+
+/* PARTICLE */
+canvas{
+ position:fixed;
+ top:0;
+ left:0;
 }
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
-<div id="intro">
- <h1>Hành Trình Xưng Bá Của Ta</h1>
-</div>
+<div id="intro">Hành Trình Xưng Bá Của Ta</div>
 
-<!-- SOUND -->
 <audio id="bgm" loop>
  <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">
 </audio>
 
-<!-- MAIN -->
-<div id="main">
+<div class="hud">
+ HP<div class="bar"><div class="hp" style="width:80%"></div></div>
+ Nội lực<div class="bar"><div class="mp" style="width:60%"></div></div>
+</div>
 
-<header>
- <div class="banner"></div>
- <h1>Hành Trình Xưng Bá Của Ta</h1>
-</header>
+<div id="main">
 
 <nav>
  <a onclick="goPage('home')">Trang chủ</a>
@@ -158,19 +159,17 @@ nav a{cursor:pointer}
 
 </div>
 
-<div class="flash" id="flash"></div>
-
-<canvas id="fog"></canvas>
+<canvas id="particle"></canvas>
 
 <script>
 
-/* ===== INTRO LOAD ===== */
+/* INTRO */
 setTimeout(()=>{
  document.getElementById("main").style.display="block"
  document.body.style.overflow="auto"
-},4000)
+},3000)
 
-/* ===== TEXT ===== */
+/* TEXT */
 const text=[
 "Hồng trần muôn sắc",
 "Mây nước đường xa",
@@ -188,7 +187,7 @@ text.forEach((t,i)=>{
  box.appendChild(p)
 })
 
-/* ===== DATA ===== */
+/* DATA */
 const members=[
 {id:1,name:"Sở Dĩ",img:"images/nv1.jpg"},
 {id:2,name:"Tạ Thừa Cảnh",img:"images/nv2.jpg"}
@@ -203,26 +202,16 @@ members.forEach(m=>{
  list.appendChild(d)
 })
 
-/* NAV */
 function show(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
  document.getElementById(id).classList.add('active')
 }
 function goPage(p){
- history.pushState({page:p},"","#"+p)
  show(p)
-}
-
-/* EFFECT CLICK */
-function flash(){
- let f=document.getElementById("flash")
- f.style.opacity=1
- setTimeout(()=>f.style.opacity=0,200)
 }
 
 /* DETAIL */
 function openDetail(id){
- flash()
  let m=members.find(x=>x.id==id)
  document.getElementById("detail").innerHTML=`
  <h1>${m.name}</h1>
@@ -238,28 +227,38 @@ function toggleMusic(){
  else a.pause()
 }
 
-/* FOG */
-let c=document.getElementById("fog")
+/* KIẾM KHÍ */
+document.addEventListener("mousemove",e=>{
+ let s=document.createElement("div")
+ s.className="sword"
+ s.style.left=e.clientX+"px"
+ s.style.top=e.clientY+"px"
+ document.body.appendChild(s)
+ setTimeout(()=>s.remove(),300)
+})
+
+/* PARTICLE */
+let c=document.getElementById("particle")
 let ctx=c.getContext("2d")
+
 function resize(){
  c.width=window.innerWidth
  c.height=window.innerHeight
 }
 resize()
 
-let fog=[]
-for(let i=0;i<20;i++){
- fog.push({x:Math.random()*c.width,y:Math.random()*c.height})
+let p=[]
+for(let i=0;i<50;i++){
+ p.push({x:Math.random()*c.width,y:Math.random()*c.height})
 }
 
 function draw(){
  ctx.clearRect(0,0,c.width,c.height)
- ctx.fillStyle="rgba(255,255,255,0.05)"
- fog.forEach(f=>{
-  ctx.beginPath()
-  ctx.arc(f.x,f.y,100,0,Math.PI*2)
-  ctx.fill()
-  f.x+=0.2
+ ctx.fillStyle="white"
+ p.forEach(i=>{
+  ctx.fillRect(i.x,i.y,2,2)
+  i.y+=0.5
+  if(i.y>c.height)i.y=0
  })
  requestAnimationFrame(draw)
 }
