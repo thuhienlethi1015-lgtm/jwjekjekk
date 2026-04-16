@@ -2,13 +2,8 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hành Trình Xưng Bá Của Ta</title>
-
-<!-- PRELOAD FONT -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;500;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
 
@@ -16,18 +11,18 @@
 body{
  margin:0;
  font-family:'Be Vietnam Pro', sans-serif;
- background:#f4fff8;
- color:#1b3a2f;
+ background:linear-gradient(to bottom,#0f1f1a,#1b3a2f);
+ color:#e8fff3;
  overflow-x:hidden;
 }
 
-/* ===== PAGE TRANSITION MƯỢT ===== */
+/* PAGE */
 .page{
  display:none;
  padding:30px;
  opacity:0;
  transform:translateY(20px);
- transition:opacity 0.4s ease, transform 0.4s ease;
+ transition:0.5s;
 }
 .page.active{
  display:block;
@@ -35,48 +30,47 @@ body{
  transform:translateY(0);
 }
 
-/* ===== BANNER ===== */
+/* HEADER */
 header{
  height:180px;
- position:relative;
  background:url('images/banner.jpg') center/cover;
  display:flex;
  align-items:center;
  justify-content:center;
+ position:relative;
 }
-
 header::after{
  content:"";
  position:absolute;
  inset:0;
- background:rgba(0,0,0,0.5);
+ background:linear-gradient(to bottom,rgba(0,0,0,0.7),rgba(0,0,0,0.4));
 }
-
 header h1{
  position:relative;
- color:#fff;
+ color:white;
  font-family:'Playfair Display', serif;
- font-size:32px;
 }
 
-/* ===== NAV ===== */
+/* NAV */
 nav{
  display:flex;
  justify-content:center;
  gap:30px;
- background:#e6fff2;
+ background:#163d2f;
  padding:12px;
 }
+nav a{
+ cursor:pointer;
+}
 
-/* ===== HOME ===== */
+/* HOME */
 .home-box{
  max-width:700px;
  margin:auto;
- background:white;
+ background:rgba(255,255,255,0.05);
  padding:30px;
  border-radius:12px;
- box-shadow:0 10px 30px rgba(0,0,0,0.1);
- text-align:center;
+ backdrop-filter:blur(10px);
 }
 
 .line{
@@ -89,7 +83,7 @@ nav{
  to{opacity:1;transform:translateY(0)}
 }
 
-/* ===== SƠ NGUYÊN ===== */
+/* ORIGIN */
 #origin{
  position:relative;
  min-height:80vh;
@@ -97,61 +91,69 @@ nav{
  align-items:center;
  justify-content:center;
 }
-
 #origin::before{
  content:"";
  position:absolute;
  inset:0;
  background:url('images/songuyen.jpg') center/cover;
- filter:blur(5px) brightness(0.6);
+ filter:blur(6px) brightness(0.5);
 }
 
 .origin-box{
  position:relative;
- color:white;
- background:rgba(0,0,0,0.4);
- padding:30px;
- border-radius:10px;
  text-align:center;
+}
+
+.origin-line{
+ opacity:0;
+ transform:translateY(30px);
+ animation:originFade 1.2s forwards;
  font-size:20px;
 }
 
-/* ===== MEMBERS ===== */
+.origin-line:nth-child(1){animation-delay:0.5s}
+.origin-line:nth-child(2){animation-delay:1.5s}
+.origin-line:nth-child(3){animation-delay:2.5s}
+
+.highlight{
+ color:#ffd700;
+ font-size:24px;
+}
+
+@keyframes originFade{
+ to{opacity:1;transform:translateY(0)}
+}
+
+/* MEMBERS */
 .members{
  display:flex;
  justify-content:center;
  gap:30px;
  flex-wrap:wrap;
- align-items:flex-start;
 }
 
 .card{
  width:220px;
- position:relative;
  cursor:pointer;
- transform:translateY(10px);
  transition:0.4s;
+ position:relative;
 }
 
 .card img{
  width:100%;
  border-radius:10px;
  opacity:0;
- transition:opacity 0.6s ease;
+ transition:0.6s;
 }
-
-/* ảnh load xong */
 .card img.loaded{
  opacity:1;
 }
 
-/* hover PC */
 .card:hover{
- transform:translateY(-10px) scale(1.05);
- box-shadow:0 0 25px rgba(0,255,150,0.6);
+ transform:translateY(-12px) scale(1.06);
+ box-shadow:0 0 40px rgba(0,255,180,0.8);
 }
 
-/* info */
 .info{
  position:absolute;
  inset:0;
@@ -164,50 +166,37 @@ nav{
  opacity:0;
  transition:0.3s;
  border-radius:10px;
- text-align:center;
- padding:10px;
 }
 .card:hover .info{
  opacity:1;
 }
-
-/* ===== MOBILE TAP ===== */
 .card.active .info{
  opacity:1;
 }
 
-/* ===== DETAIL ===== */
+/* DETAIL */
 #detail{
  min-height:100vh;
- position:relative;
  display:flex;
- align-items:center;
  justify-content:center;
+ align-items:center;
 }
-
-#detail::before{
- content:"";
- position:absolute;
- inset:0;
- background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') center/cover;
- filter:brightness(0.7);
-}
-
 .detail-box{
- position:relative;
  background:rgba(255,255,255,0.9);
  padding:30px;
  border-radius:12px;
  text-align:center;
- max-width:400px;
 }
 
-/* ===== PARTICLE ===== */
+/* PARTICLE + SMOKE */
 canvas{
  position:fixed;
  top:0;
  left:0;
  pointer-events:none;
+}
+#smoke{
+ opacity:0.25;
 }
 </style>
 </head>
@@ -215,6 +204,7 @@ canvas{
 <body>
 
 <canvas id="particle"></canvas>
+<canvas id="smoke"></canvas>
 
 <header>
  <h1>Hành Trình Xưng Bá Của Ta</h1>
@@ -234,9 +224,9 @@ canvas{
 <!-- ORIGIN -->
 <div id="origin" class="page">
  <div class="origin-box">
- Mười năm trước may mắn đã gặp các vị<br>
- Mười năm sau may mắn được gặp các vị<br>
- Đều là vinh hạnh của ta!
+  <p class="origin-line">Mười năm trước may mắn đã gặp các vị</p>
+  <p class="origin-line">Mười năm sau may mắn được gặp các vị</p>
+  <p class="origin-line highlight">Đều là vinh hạnh của ta!</p>
  </div>
 </div>
 
@@ -245,7 +235,7 @@ canvas{
  <div class="members">
 
   <div class="card" onclick="handleCard(this,1)">
-   <img src="images/nv1.jpg" loading="lazy">
+   <img src="./images/nv1.jpg">
    <div class="info">
     <b>Sở Dĩ</b>
     <p>Xưng bá thiên hạ</p>
@@ -253,7 +243,7 @@ canvas{
   </div>
 
   <div class="card" onclick="handleCard(this,2)">
-   <img src="images/nv2.jpg" loading="lazy">
+   <img src="./images/nv2.jpg">
    <div class="info">
     <b>Tạ Thừa Cảnh</b>
     <p>Tùy tâm mà sống</p>
@@ -285,20 +275,22 @@ text.forEach((t,i)=>{
  box.appendChild(p)
 })
 
-/* NAV FIX SCROLL */
+/* NAV */
 function show(id){
- document.querySelectorAll('.page').forEach(p=>{
-   p.classList.remove('active')
-   p.style.display='none'
- })
+ let pages=document.querySelectorAll('.page')
+ pages.forEach(p=>p.classList.remove('active'))
 
  let el=document.getElementById(id)
- el.style.display='block'
 
- requestAnimationFrame(()=>{
-   el.classList.add('active')
-   window.scrollTo(0,0)
- })
+ setTimeout(()=>{
+   pages.forEach(p=>p.style.display='none')
+   el.style.display='block'
+
+   requestAnimationFrame(()=>{
+     el.classList.add('active')
+     window.scrollTo({top:0,behavior:"smooth"})
+   })
+ },200)
 }
 
 function goPage(page){
@@ -306,7 +298,7 @@ function goPage(page){
  show(page)
 }
 
-/* MOBILE + CLICK */
+/* CARD */
 function handleCard(el,id){
  if(window.innerWidth<768){
    el.classList.toggle('active')
@@ -318,8 +310,8 @@ function handleCard(el,id){
 /* DETAIL */
 function openDetail(id){
  let data={
- 1:{name:"Sở Dĩ",img:"images/nv1.jpg"},
- 2:{name:"Tạ Thừa Cảnh",img:"images/nv2.jpg"}
+ 1:{name:"Sở Dĩ",img:"./images/nv1.jpg"},
+ 2:{name:"Tạ Thừa Cảnh",img:"./images/nv2.jpg"}
  }
 
  let m=data[id]
@@ -346,12 +338,16 @@ window.onpopstate=function(e){
  }else show("home")
 }
 
-/* IMAGE FADE LOAD */
+/* IMAGE LOAD FIX */
 document.querySelectorAll("img").forEach(img=>{
  img.onload=()=>img.classList.add("loaded")
+ img.onerror=()=>{
+  img.src="https://via.placeholder.com/300x400"
+  img.classList.add("loaded")
+ }
 })
 
-/* PARTICLE MƯỢT */
+/* PARTICLE */
 let c=document.getElementById("particle")
 let ctx=c.getContext("2d")
 
@@ -363,11 +359,7 @@ resize()
 
 let p=[]
 for(let i=0;i<50;i++){
- p.push({
-  x:Math.random()*c.width,
-  y:Math.random()*c.height,
-  v:Math.random()*0.5+0.2
- })
+ p.push({x:Math.random()*c.width,y:Math.random()*c.height,v:Math.random()*0.5+0.2})
 }
 
 function draw(){
@@ -381,6 +373,50 @@ function draw(){
  requestAnimationFrame(draw)
 }
 draw()
+
+/* SMOKE */
+let smoke=document.getElementById("smoke")
+let sctx=smoke.getContext("2d")
+
+function resizeSmoke(){
+ smoke.width=window.innerWidth
+ smoke.height=window.innerHeight
+}
+resizeSmoke()
+
+let smokes=[]
+for(let i=0;i<25;i++){
+ smokes.push({
+  x:Math.random()*smoke.width,
+  y:Math.random()*smoke.height,
+  r:Math.random()*40+20,
+  v:Math.random()*0.3+0.1
+ })
+}
+
+function drawSmoke(){
+ sctx.clearRect(0,0,smoke.width,smoke.height)
+
+ smokes.forEach(s=>{
+  let g=sctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r)
+  g.addColorStop(0,"rgba(255,255,255,0.15)")
+  g.addColorStop(1,"transparent")
+
+  sctx.fillStyle=g
+  sctx.beginPath()
+  sctx.arc(s.x,s.y,s.r,0,Math.PI*2)
+  sctx.fill()
+
+  s.y-=s.v
+  if(s.y<0){
+    s.y=smoke.height
+    s.x=Math.random()*smoke.width
+  }
+ })
+
+ requestAnimationFrame(drawSmoke)
+}
+drawSmoke()
 
 </script>
 
