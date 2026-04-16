@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hành Trình Xưng Bá Của Ta</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 body{
  margin:0;
  font-family:'Noto Serif SC', serif;
- background:black;
- color:white;
+ background:#f4fff7;
+ color:#0f2e1f;
  overflow:hidden;
 }
 
@@ -20,11 +20,12 @@ body{
 #intro{
  position:fixed;
  inset:0;
- background:black;
+ background:#eafff0;
  display:flex;
  justify-content:center;
  align-items:center;
- font-size:30px;
+ font-size:40px;
+ font-family:'Ma Shan Zheng', cursive;
  z-index:9999;
  animation:fadeOut 3s 3s forwards;
 }
@@ -39,20 +40,29 @@ body{
 nav{
  display:flex;
  justify-content:center;
- gap:20px;
- background:#111;
- padding:10px;
+ gap:25px;
+ background:#d9f5e3;
+ padding:12px;
+ box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
-nav a{cursor:pointer}
+nav a{
+ cursor:pointer;
+ font-family:'Ma Shan Zheng';
+ font-size:18px;
+}
 
 /* PAGE */
-.page{display:none;padding:20px}
+.page{display:none;padding:30px}
 .page.active{display:block}
 
-/* HOME TEXT */
+/* TEXT */
 .line{
  opacity:0;
+ transform:translateY(30px);
  animation:fadeUp 1s forwards;
+ font-family:'Ma Shan Zheng';
+ font-size:22px;
+ text-align:center;
 }
 @keyframes fadeUp{
  to{opacity:1;transform:translateY(0)}
@@ -66,12 +76,17 @@ nav a{cursor:pointer}
 }
 .card{
  width:200px;
+ background:white;
+ border-radius:10px;
+ padding:10px;
  cursor:pointer;
+ box-shadow:0 4px 15px rgba(0,0,0,0.1);
  text-align:center;
 }
 .card img{
  width:100%;
- animation:float 3s infinite;
+ border-radius:10px;
+ animation:float 3s infinite ease-in-out;
 }
 @keyframes float{
  50%{transform:translateY(-10px)}
@@ -80,7 +95,7 @@ nav a{cursor:pointer}
 /* DETAIL */
 #detail{
  min-height:100vh;
- background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') center/cover;
+ background:linear-gradient(#eafff0,#ffffff);
  text-align:center;
  padding-top:50px;
 }
@@ -91,22 +106,25 @@ nav a{cursor:pointer}
  top:10px;
  left:10px;
  z-index:999;
+ font-size:12px;
 }
 .bar{
  width:200px;
  height:10px;
- background:#333;
+ background:#ccc;
  margin-bottom:5px;
+ border-radius:5px;
+ overflow:hidden;
 }
-.hp{background:red;height:100%}
-.mp{background:cyan;height:100%}
+.hp{background:#4caf50;height:100%}
+.mp{background:#81c784;height:100%}
 
-/* KIEM KHI */
+/* KIẾM KHÍ */
 .sword{
  position:fixed;
  width:6px;
  height:40px;
- background:linear-gradient(white,cyan);
+ background:linear-gradient(#ffffff,#4caf50);
  pointer-events:none;
  transform:rotate(45deg);
  opacity:0.7;
@@ -117,6 +135,23 @@ canvas{
  position:fixed;
  top:0;
  left:0;
+}
+
+/* BUBBLE */
+.bubble{
+ position:fixed;
+ bottom:-50px;
+ width:10px;
+ height:10px;
+ background:rgba(100,255,150,0.3);
+ border-radius:50%;
+ animation:rise linear infinite;
+}
+@keyframes rise{
+ to{
+  transform:translateY(-110vh) scale(1.5);
+  opacity:0;
+ }
 }
 </style>
 </head>
@@ -143,18 +178,26 @@ canvas{
  <a onclick="toggleMusic()">🎵</a>
 </nav>
 
+<!-- HOME -->
 <div id="home" class="page active">
  <div id="homeText"></div>
 </div>
 
+<!-- ORIGIN -->
 <div id="origin" class="page">
- <p>"Mười năm trước may mắn đã gặp các vị..."</p>
+ <p style="text-align:center;font-family:'Ma Shan Zheng';font-size:22px;">
+ "Mười năm trước may mắn đã gặp các vị  
+ Mười năm sau may mắn được gặp các vị  
+ Đều là vinh hạnh của ta!"
+ </p>
 </div>
 
+<!-- MEMBERS -->
 <div id="members" class="page">
  <div class="members" id="memberList"></div>
 </div>
 
+<!-- DETAIL -->
 <div id="detail" class="page"></div>
 
 </div>
@@ -189,10 +232,23 @@ text.forEach((t,i)=>{
 
 /* DATA */
 const members=[
-{id:1,name:"Sở Dĩ",img:"images/nv1.jpg"},
-{id:2,name:"Tạ Thừa Cảnh",img:"images/nv2.jpg"}
+{
+ id:1,
+ name:"Sở Dĩ",
+ img:"images/nv1.jpg",
+ wish:"Làm giang hồ, xưng bá thiên hạ",
+ quote:"Đã đến nhân gian rồi thì cứ sống khoái hoạt một lần đi!"
+},
+{
+ id:2,
+ name:"Tạ Thừa Cảnh",
+ img:"images/nv2.jpg",
+ wish:"Ta cũng không rõ nữa, muốn làm cái cây có tính không?",
+ quote:"Chuyện ngươi muốn làm thì ta đều ủng hộ hết"
+}
 ]
 
+/* RENDER */
 let list=document.getElementById("memberList")
 members.forEach(m=>{
  let d=document.createElement('div')
@@ -202,22 +258,58 @@ members.forEach(m=>{
  list.appendChild(d)
 })
 
+/* NAV */
 function show(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
  document.getElementById(id).classList.add('active')
 }
-function goPage(p){
- show(p)
+
+function goPage(page){
+ history.pushState({page:page},"","#"+page)
+ show(page)
 }
 
 /* DETAIL */
 function openDetail(id){
  let m=members.find(x=>x.id==id)
+
  document.getElementById("detail").innerHTML=`
- <h1>${m.name}</h1>
- <img src="${m.img}" width="200">
+ <h1 style="font-family:'Ma Shan Zheng';font-size:40px">${m.name}</h1>
+ <img src="${m.img}" width="220">
+ <p><b>Ước vọng:</b> ${m.wish}</p>
+ <p style="font-style:italic">"${m.quote}"</p>
  `
+
+ history.pushState({page:"member-"+id},"","#member-"+id)
  show("detail")
+}
+
+/* BACK */
+window.onpopstate=function(e){
+ if(e.state){
+   if(e.state.page.startsWith("member-")){
+     let id=e.state.page.split("-")[1]
+     openDetail(id)
+   }else{
+     show(e.state.page)
+   }
+ }else{
+   show("home")
+ }
+}
+
+/* LOAD */
+window.onload=function(){
+ let hash=location.hash.replace("#","")
+
+ if(hash.startsWith("member-")){
+   let id=hash.split("-")[1]
+   openDetail(id)
+ }else if(hash){
+   show(hash)
+ }else{
+   show("home")
+ }
 }
 
 /* MUSIC */
@@ -248,21 +340,30 @@ function resize(){
 resize()
 
 let p=[]
-for(let i=0;i<50;i++){
+for(let i=0;i<40;i++){
  p.push({x:Math.random()*c.width,y:Math.random()*c.height})
 }
 
 function draw(){
  ctx.clearRect(0,0,c.width,c.height)
- ctx.fillStyle="white"
+ ctx.fillStyle="rgba(0,150,0,0.5)"
  p.forEach(i=>{
   ctx.fillRect(i.x,i.y,2,2)
-  i.y+=0.5
+  i.y+=0.3
   if(i.y>c.height)i.y=0
  })
  requestAnimationFrame(draw)
 }
 draw()
+
+/* BUBBLE */
+for(let i=0;i<20;i++){
+ let b=document.createElement("div")
+ b.className="bubble"
+ b.style.left=Math.random()*100+"vw"
+ b.style.animationDuration=(5+Math.random()*10)+"s"
+ document.body.appendChild(b)
+}
 
 </script>
 
